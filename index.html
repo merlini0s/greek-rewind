@@ -7,613 +7,144 @@
   <meta name="description" content="50+ years of Greek music. No ads. No algorithm. Just pure discovery.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=VT323&family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
-    /* ─── DESIGN TOKENS ─────────────────────────────────────── */
-    :root {
-      --bg:          #06060E;
-      --surface:     #0C0C1E;
-      --surface2:    #121228;
-      --blue:        #1152CC;
-      --blue-bright: #3B82F6;
-      --blue-glow:   rgba(59,130,246,0.35);
-      --white:       #F0F4FF;
-      --gold:        #F59E0B;
-      --gold-light:  #FCD34D;
-      --pink:        #EF4444;
-      --cyan:        #06B6D4;
-      --green:       #22C55E;
-      --text:        #CBD5E1;
-      --text-dim:    #475569;
-      --border:      rgba(255,255,255,0.07);
-      --border-blue: rgba(59,130,246,0.25);
-    }
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html, body { height:100%; overflow:hidden; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Barlow', sans-serif;
-    }
-
-    /* ─── SPLASH ─────────────────────────────────────────────── */
-    #splash {
-      position: fixed; inset: 0; z-index: 999;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      overflow: hidden;
-    }
-
-    /* Animated Greek meander/wave pattern background */
-    .splash-bg {
-      position: absolute; inset: 0;
-      background-color: #06060E;
-      overflow: hidden;
-    }
-    .splash-bg canvas {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      opacity: 0.18;
-    }
-
-    /* Radial vignette */
-    .splash-vignette {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 70% at 50% 50%,
-        transparent 20%, rgba(6,6,14,0.75) 70%, #06060E 100%);
-    }
-
-    .splash-content {
-      position: relative; z-index: 2;
-      text-align: center;
-      animation: splashIn 1s ease both;
-    }
-    @keyframes splashIn {
-      from { opacity:0; transform: translateY(20px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-
-    .splash-eyebrow {
-      font-family: 'VT323', monospace;
-      font-size: clamp(18px, 3vw, 28px);
-      letter-spacing: 0.4em;
-      color: var(--text-dim);
-      margin-bottom: 8px;
-      animation: fadeInDelay 0.8s ease 0.2s both;
-    }
-
-    .splash-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(72px, 16vw, 160px);
-      line-height: 0.88;
-      margin: 0 0 12px;
-      animation: fadeInDelay 0.8s ease 0.4s both;
-    }
-    .splash-logo .line-greek {
-      display: block;
-      background: linear-gradient(160deg, #60A5FA 0%, #BFDBFE 45%, #ffffff 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(96,165,250,0.7));
-    }
-    .splash-logo .line-rewind {
-      display: block;
-      background: linear-gradient(160deg, #F59E0B 0%, #FCD34D 50%, #FEF3C7 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(245,158,11,0.7));
-    }
-
-    /* Greek key / meander decoration */
-    .meander-bar {
-      display: flex; justify-content: center; align-items: center;
-      gap: 0; margin: 16px auto 20px;
-      animation: fadeInDelay 0.8s ease 0.6s both;
-    }
-    .meander-bar svg { width: 320px; height: 20px; opacity: 0.5; }
-
-    .splash-tagline {
-      font-family: 'VT323', monospace;
-      font-size: clamp(14px, 2.5vw, 22px);
-      letter-spacing: 0.2em;
-      color: var(--text-dim);
-      margin-bottom: 44px;
-      animation: fadeInDelay 0.8s ease 0.8s both;
-    }
-
-    .enter-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 26px; letter-spacing: 0.25em;
-      padding: 14px 52px;
-      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-bright) 100%);
-      color: #fff; border: none; border-radius: 50px; cursor: pointer;
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.15),
-                  0 0 50px var(--blue-glow);
-      animation: fadeInDelay 0.8s ease 1s both, pulse 2.5s ease-in-out 2s infinite;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .enter-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 0 70px rgba(59,130,246,0.7);
-    }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 0 2px rgba(255,255,255,0.15), 0 0 50px var(--blue-glow); }
-      50%      { box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 0 80px rgba(59,130,246,0.6); }
-    }
-
-    .splash-footer {
-      position: absolute; bottom: 28px; left: 0; right: 0;
-      text-align: center;
-      font-family: 'VT323', monospace; font-size: 16px;
-      color: var(--text-dim); letter-spacing: 0.12em;
-      animation: fadeInDelay 0.8s ease 1.4s both;
-    }
-
-    @keyframes fadeInDelay {
-      from { opacity:0; transform: translateY(10px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-
-    .splash-exit {
-      animation: splashExit 0.55s cubic-bezier(0.4,0,1,1) forwards !important;
-    }
-    @keyframes splashExit {
-      to { opacity:0; transform: scale(1.04); pointer-events:none; }
-    }
-
-
-    /* ─── MAIN LAYOUT ────────────────────────────────────────── */
-    #main { display:none; height:100vh; width:100vw; overflow:hidden; }
-
-    /* Scanline overlay */
-    #main::after {
-      content:''; position:fixed; inset:0; pointer-events:none; z-index:200;
-      background: repeating-linear-gradient(0deg,
-        transparent, transparent 2px,
-        rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr 308px;
-      grid-template-rows: 58px 1fr;
-      height: 100vh;
-    }
-
-
-    /* ─── HEADER ─────────────────────────────────────────────── */
-    .header {
-      grid-column: 1 / -1;
-      display: flex; align-items: center; gap: 18px;
-      padding: 0 20px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      position: relative; z-index: 10;
-    }
-
-    .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 26px; letter-spacing: 0.08em;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-    .logo .lg { color: #60A5FA; }
-    .logo .lr { color: var(--gold); }
-
-    .ticker-wrap {
-      flex:1; overflow:hidden; position:relative;
-      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-    }
-    .ticker {
-      display: flex; align-items: center; gap: 10px;
-      white-space: nowrap;
-    }
-    .live-dot {
-      width:8px; height:8px; border-radius:50%;
-      background: var(--pink); flex-shrink:0;
-      animation: blink 1s infinite;
-      box-shadow: 0 0 8px var(--pink);
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    .ticker-text {
-      font-family: 'VT323', monospace; font-size:17px;
-      color: var(--text-dim);
-    }
-    .ticker-text b { color: var(--white); }
-
-    .hdr-btns { display:flex; gap:8px; }
-    .hdr-btn {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text); padding: 5px 14px;
-      border-radius: 20px; cursor: pointer;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 13px; font-weight:700;
-      letter-spacing: 0.08em;
-      transition: background 0.18s, border-color 0.18s, color 0.18s;
-    }
-    .hdr-btn:hover {
-      background: rgba(59,130,246,0.2);
-      border-color: var(--border-blue);
-      color: #fff;
-    }
-    .hdr-btn.shuf {
-      background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(245,158,11,0.15));
-      border-color: rgba(245,158,11,0.3);
-      color: var(--gold-light);
-    }
-    .hdr-btn.shuf:hover {
-      background: linear-gradient(135deg, rgba(59,130,246,0.35), rgba(245,158,11,0.25));
-    }
-
-
-    /* ─── PLAYER AREA ────────────────────────────────────────── */
-    .player-area {
-      display: flex; align-items: center; justify-content: center;
-      padding: 28px 32px;
-      background: var(--bg);
-      position: relative; overflow:hidden;
-    }
-
-    /* Subtle ambient glow behind TV */
-    .player-area::before {
-      content:''; position:absolute;
-      width:60%; height:60%;
-      background: radial-gradient(ellipse, rgba(17,82,204,0.12) 0%, transparent 70%);
-      pointer-events:none;
-    }
-
-    /* CRT TV Frame */
-    .tv-wrap {
-      position: relative;
-      width: 100%; max-width: 820px;
-    }
-
-    .tv-frame {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #0A0A1C;
-      border-radius: 18px;
-      padding: 10px;
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.04),
-        0 0 0 10px #111130,
-        0 0 0 11px rgba(255,255,255,0.03),
-        0 0 0 22px #080820,
-        0 40px 100px rgba(0,0,0,0.85),
-        0 0 80px rgba(59,130,246,0.08);
-      position: relative;
-    }
-
-    /* CRT corner "knobs" */
-    .tv-frame::before, .tv-frame::after {
-      content:''; position:absolute;
-      width:18px; height:18px;
-      background: #1A1A38;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.05);
-      bottom: -30px;
-    }
-    .tv-frame::before { left:15%; }
-    .tv-frame::after  { right:15%; }
-
-    .tv-screen {
-      width:100%; height:100%;
-      background:#000; border-radius:10px;
-      overflow:hidden; position:relative;
-    }
-    .tv-screen iframe { width:100%; height:100%; border:none; display:block; }
-
-    /* Loading state */
-    .tv-placeholder {
-      position:absolute; inset:0;
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center; gap:16px;
-      background: linear-gradient(135deg, #080814, #0D0D28);
-    }
-    .tv-placeholder .ph-logo {
-      font-family: 'Bebas Neue', sans-serif; font-size:48px;
-      background: linear-gradient(135deg, #60A5FA, #F59E0B);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    }
-    .tv-placeholder .ph-msg {
-      font-family: 'VT323', monospace; font-size:20px;
-      color: var(--text-dim); letter-spacing:0.2em;
-      animation: blink 1.5s infinite;
-    }
-    .tv-placeholder .ph-arrow {
-      font-family: 'VT323', monospace; font-size:16px;
-      color: var(--blue-bright); letter-spacing:0.1em;
-      margin-top:8px;
-    }
-
-    /* Channel badge above player */
-    .now-badge {
-      position: absolute;
-      top: -38px; left: 0;
-      display: flex; align-items:center; gap:8px;
-    }
-    .now-badge .badge-channel {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size:13px; font-weight:700; letter-spacing:0.1em;
-      color: var(--blue-bright);
-      background: rgba(59,130,246,0.12);
-      border: 1px solid var(--border-blue);
-      padding: 3px 10px; border-radius:4px;
-    }
-    .now-badge .badge-title {
-      font-family: 'VT323', monospace; font-size:16px;
-      color: var(--text-dim); max-width:400px;
-      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-    }
-
-
-    /* ─── SIDEBAR ────────────────────────────────────────────── */
-    .sidebar {
-      background: var(--surface);
-      border-left: 1px solid var(--border);
-      display: flex; flex-direction:column;
-      overflow:hidden;
-    }
-
-    .sb-section {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      flex-shrink:0;
-    }
-
-    .sb-label {
-      font-family: 'VT323', monospace;
-      font-size: 13px; letter-spacing:0.22em;
-      color: var(--text-dim); margin-bottom:10px;
-      text-transform:uppercase;
-    }
-
-    /* Donate */
-    .donate-btn {
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      width:100%; padding:11px 16px;
-      background: linear-gradient(135deg, #D97706, #F59E0B, #FCD34D);
-      border:none; border-radius:8px; cursor:pointer;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size:15px; font-weight:900; letter-spacing:0.12em;
-      color:#1C0900; text-decoration:none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(245,158,11,0.2);
-    }
-    .donate-btn:hover {
-      transform:scale(1.02);
-      box-shadow: 0 4px 30px rgba(245,158,11,0.45);
-    }
-    .donate-sub {
-      font-size:11px; color:var(--text-dim);
-      text-align:center; margin-top:7px;
-      line-height:1.4;
-    }
-
-    /* Stats row */
-    .stats-row { display:flex; gap:0; }
-    .stat-cell {
-      flex:1; text-align:center;
-      padding:6px 4px;
-      border-right:1px solid var(--border);
-    }
-    .stat-cell:last-child { border-right:none; }
-    .stat-val {
-      font-family:'VT323', monospace; font-size:26px;
-      color:var(--gold); display:block; line-height:1;
-    }
-    .stat-lbl {
-      font-size:10px; letter-spacing:0.1em;
-      color:var(--text-dim); text-transform:uppercase;
-      display:block; margin-top:2px;
-    }
-
-    /* Now playing card */
-    .np-card {
-      background: rgba(59,130,246,0.06);
-      border:1px solid var(--border-blue);
-      border-radius:8px; padding:12px;
-    }
-    .np-ch {
-      font-family:'VT323', monospace; font-size:12px;
-      letter-spacing:0.2em; color:var(--blue-bright);
-      margin-bottom:4px;
-    }
-    .np-title {
-      font-family:'Barlow Condensed', sans-serif;
-      font-weight:700; font-size:15px; color:var(--white);
-      line-height:1.3; margin-bottom:2px;
-    }
-    .np-artist {
-      font-size:12px; color:var(--text-dim);
-    }
-
-    /* Channel list */
-    .ch-list {
-      flex:1; overflow-y:auto;
-      padding: 8px 8px 16px;
-    }
-    .ch-list::-webkit-scrollbar { width:3px; }
-    .ch-list::-webkit-scrollbar-track { background:transparent; }
-    .ch-list::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:2px; }
-
-    .cat-label {
-      font-size:10px; font-weight:700; letter-spacing:0.2em;
-      color:var(--text-dim); text-transform:uppercase;
-      padding:10px 8px 5px;
-    }
-
-    .ch-item {
-      display:flex; align-items:center; gap:10px;
-      padding:9px 10px; border-radius:8px; cursor:pointer;
-      transition: background 0.15s;
-      margin-bottom:2px;
-      border-left:3px solid transparent;
-    }
-    .ch-item:hover { background: rgba(255,255,255,0.05); }
-    .ch-item.active {
-      background: rgba(59,130,246,0.12);
-      border-left-color: var(--blue-bright);
-    }
-    .ch-emoji { font-size:20px; width:26px; text-align:center; flex-shrink:0; }
-    .ch-info { flex:1; overflow:hidden; }
-    .ch-name {
-      font-family:'Barlow Condensed', sans-serif;
-      font-weight:700; font-size:14px; color:var(--white);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .ch-meta {
-      font-family:'VT323', monospace; font-size:13px; color:var(--text-dim);
-    }
-    .ch-live {
-      width:6px; height:6px; border-radius:50%;
-      background:var(--green); flex-shrink:0;
-      box-shadow:0 0 6px var(--green);
-    }
-
-    /* Footer */
-    .sidebar-footer {
-      padding:10px 16px;
-      border-top:1px solid var(--border);
-      flex-shrink:0;
-    }
-    .sf-text {
-      font-size:11px; color:var(--text-dim);
-      text-align:center; line-height:1.6;
-    }
-    .sf-text a { color:var(--blue-bright); text-decoration:none; }
-    .sf-text a:hover { text-decoration:underline; }
+    :root{--bg:#06060E;--surface:#0C0C1E;--surface2:#121228;--blue:#1152CC;--blue-bright:#3B82F6;--blue-glow:rgba(59,130,246,0.35);--white:#F0F4FF;--gold:#F59E0B;--gold-light:#FCD34D;--pink:#EF4444;--cyan:#06B6D4;--green:#22C55E;--text:#CBD5E1;--text-dim:#475569;--border:rgba(255,255,255,0.07);--border-blue:rgba(59,130,246,0.25);}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html,body{height:100%;overflow:hidden;}
+    body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;}
+    #splash{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+    .splash-bg{position:absolute;inset:0;background-color:#06060E;overflow:hidden;}
+    .splash-bg canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0.18;}
+    .splash-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 50%,transparent 20%,rgba(6,6,14,0.75) 70%,#06060E 100%);}
+    .splash-content{position:relative;z-index:2;text-align:center;animation:splashIn 1s ease both;}
+    @keyframes splashIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .splash-eyebrow{font-family:'VT323',monospace;font-size:clamp(18px,3vw,28px);letter-spacing:0.4em;color:var(--text-dim);margin-bottom:8px;animation:fadeInDelay 0.8s ease 0.2s both;}
+    .splash-logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,16vw,160px);line-height:0.88;margin:0 0 12px;animation:fadeInDelay 0.8s ease 0.4s both;}
+    .splash-logo .line-greek{display:block;background:linear-gradient(160deg,#60A5FA 0%,#BFDBFE 45%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(96,165,250,0.7));}
+    .splash-logo .line-rewind{display:block;background:linear-gradient(160deg,#F59E0B 0%,#FCD34D 50%,#FEF3C7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(245,158,11,0.7));}
+    .meander-bar{display:flex;justify-content:center;align-items:center;margin:16px auto 20px;animation:fadeInDelay 0.8s ease 0.6s both;}
+    .meander-bar svg{width:320px;height:20px;opacity:0.5;}
+    .splash-tagline{font-family:'VT323',monospace;font-size:clamp(14px,2.5vw,22px);letter-spacing:0.2em;color:var(--text-dim);margin-bottom:44px;animation:fadeInDelay 0.8s ease 0.8s both;}
+    .enter-btn{display:inline-flex;align-items:center;gap:10px;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.25em;padding:14px 52px;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-bright) 100%);color:#fff;border:none;border-radius:50px;cursor:pointer;box-shadow:0 0 0 2px rgba(255,255,255,0.15),0 0 50px var(--blue-glow);animation:fadeInDelay 0.8s ease 1s both,pulse 2.5s ease-in-out 2s infinite;transition:transform 0.2s,box-shadow 0.2s;}
+    .enter-btn:hover{transform:scale(1.04);box-shadow:0 0 0 2px rgba(255,255,255,0.3),0 0 70px rgba(59,130,246,0.7);}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 2px rgba(255,255,255,0.15),0 0 50px var(--blue-glow)}50%{box-shadow:0 0 0 2px rgba(255,255,255,0.3),0 0 80px rgba(59,130,246,0.6)}}
+    .splash-footer{position:absolute;bottom:28px;left:0;right:0;text-align:center;font-family:'VT323',monospace;font-size:16px;color:var(--text-dim);letter-spacing:0.12em;animation:fadeInDelay 0.8s ease 1.4s both;}
+    @keyframes fadeInDelay{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .splash-exit{animation:splashExit 0.55s cubic-bezier(0.4,0,1,1) forwards!important;}
+    @keyframes splashExit{to{opacity:0;transform:scale(1.04);pointer-events:none}}
+    #main{display:none;height:100vh;width:100vw;overflow:hidden;}
+    #main::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:200;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);}
+    .layout{display:grid;grid-template-columns:1fr 308px;grid-template-rows:58px 1fr;height:100vh;}
+    .header{grid-column:1/-1;display:flex;align-items:center;gap:18px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border);position:relative;z-index:10;}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.08em;flex-shrink:0;white-space:nowrap;}
+    .logo .lg{color:#60A5FA;}.logo .lr{color:var(--gold);}
+    .ticker-wrap{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent);}
+    .ticker{display:flex;align-items:center;gap:10px;white-space:nowrap;}
+    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--pink);flex-shrink:0;animation:blink 1s infinite;box-shadow:0 0 8px var(--pink);}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    .ticker-text{font-family:'VT323',monospace;font-size:17px;color:var(--text-dim);}
+    .ticker-text b{color:var(--white);}
+    .hdr-btns{display:flex;gap:8px;}
+    .hdr-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 14px;border-radius:20px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;transition:background 0.18s,border-color 0.18s,color 0.18s;}
+    .hdr-btn:hover{background:rgba(59,130,246,0.2);border-color:var(--border-blue);color:#fff;}
+    .hdr-btn.shuf{background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(245,158,11,0.15));border-color:rgba(245,158,11,0.3);color:var(--gold-light);}
+    .hdr-btn.shuf:hover{background:linear-gradient(135deg,rgba(59,130,246,0.35),rgba(245,158,11,0.25));}
+    .player-area{display:flex;align-items:center;justify-content:center;padding:28px 32px;background:var(--bg);position:relative;overflow:hidden;}
+    .player-area::before{content:'';position:absolute;width:60%;height:60%;background:radial-gradient(ellipse,rgba(17,82,204,0.12) 0%,transparent 70%);pointer-events:none;}
+    .tv-wrap{position:relative;width:100%;max-width:820px;}
+    .tv-frame{width:100%;aspect-ratio:16/9;background:#0A0A1C;border-radius:18px;padding:10px;box-shadow:0 0 0 1px rgba(255,255,255,0.04),0 0 0 10px #111130,0 0 0 11px rgba(255,255,255,0.03),0 0 0 22px #080820,0 40px 100px rgba(0,0,0,0.85),0 0 80px rgba(59,130,246,0.08);position:relative;}
+    .tv-frame::before,.tv-frame::after{content:'';position:absolute;width:18px;height:18px;background:#1A1A38;border-radius:50%;border:2px solid rgba(255,255,255,0.05);bottom:-30px;}
+    .tv-frame::before{left:15%;}.tv-frame::after{right:15%;}
+    .tv-screen{width:100%;height:100%;background:#000;border-radius:10px;overflow:hidden;position:relative;}
+    .tv-screen iframe{width:100%;height:100%;border:none;display:block;}
+    .tv-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:linear-gradient(135deg,#080814,#0D0D28);}
+    .tv-placeholder .ph-logo{font-family:'Bebas Neue',sans-serif;font-size:48px;background:linear-gradient(135deg,#60A5FA,#F59E0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .tv-placeholder .ph-msg{font-family:'VT323',monospace;font-size:20px;color:var(--text-dim);letter-spacing:0.2em;animation:blink 1.5s infinite;}
+    .tv-placeholder .ph-arrow{font-family:'VT323',monospace;font-size:16px;color:var(--blue-bright);letter-spacing:0.1em;margin-top:8px;}
+    .now-badge{position:absolute;top:-38px;left:0;display:flex;align-items:center;gap:8px;}
+    .now-badge .badge-channel{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;color:var(--blue-bright);background:rgba(59,130,246,0.12);border:1px solid var(--border-blue);padding:3px 10px;border-radius:4px;}
+    .now-badge .badge-title{font-family:'VT323',monospace;font-size:16px;color:var(--text-dim);max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .sidebar{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+    .sb-section{padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
+    .sb-label{font-family:'VT323',monospace;font-size:13px;letter-spacing:0.22em;color:var(--text-dim);margin-bottom:10px;text-transform:uppercase;}
+    .donate-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 16px;background:linear-gradient(135deg,#D97706,#F59E0B,#FCD34D);border:none;border-radius:8px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;letter-spacing:0.12em;color:#1C0900;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 20px rgba(245,158,11,0.2);}
+    .donate-btn:hover{transform:scale(1.02);box-shadow:0 4px 30px rgba(245,158,11,0.45);}
+    .donate-sub{font-size:11px;color:var(--text-dim);text-align:center;margin-top:7px;line-height:1.4;}
+    .stats-row{display:flex;}
+    .stat-cell{flex:1;text-align:center;padding:6px 4px;border-right:1px solid var(--border);}
+    .stat-cell:last-child{border-right:none;}
+    .stat-val{font-family:'VT323',monospace;font-size:26px;color:var(--gold);display:block;line-height:1;}
+    .stat-lbl{font-size:10px;letter-spacing:0.1em;color:var(--text-dim);text-transform:uppercase;display:block;margin-top:2px;}
+    .np-card{background:rgba(59,130,246,0.06);border:1px solid var(--border-blue);border-radius:8px;padding:12px;}
+    .np-ch{font-family:'VT323',monospace;font-size:12px;letter-spacing:0.2em;color:var(--blue-bright);margin-bottom:4px;}
+    .np-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:var(--white);line-height:1.3;margin-bottom:2px;}
+    .np-artist{font-size:12px;color:var(--text-dim);}
+    .ch-list{flex:1;overflow-y:auto;padding:8px 8px 16px;}
+    .ch-list::-webkit-scrollbar{width:3px;}
+    .ch-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px;}
+    .cat-label{font-size:10px;font-weight:700;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;padding:10px 8px 5px;}
+    .ch-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:background 0.15s;margin-bottom:2px;border-left:3px solid transparent;}
+    .ch-item:hover{background:rgba(255,255,255,0.05);}
+    .ch-item.active{background:rgba(59,130,246,0.12);border-left-color:var(--blue-bright);}
+    .ch-emoji{font-size:20px;width:26px;text-align:center;flex-shrink:0;}
+    .ch-info{flex:1;overflow:hidden;}
+    .ch-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .ch-meta{font-family:'VT323',monospace;font-size:13px;color:var(--text-dim);}
+    .ch-live{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+    .sidebar-footer{padding:10px 16px;border-top:1px solid var(--border);flex-shrink:0;}
+    .sf-text{font-size:11px;color:var(--text-dim);text-align:center;line-height:1.6;}
+    .sf-text a{color:var(--blue-bright);text-decoration:none;}
   </style>
 </head>
 <body>
-
-<!-- ════════════════════════════════════════════
-     SPLASH SCREEN
-════════════════════════════════════════════ -->
 <div id="splash">
   <div class="splash-bg"><canvas id="meander-canvas"></canvas></div>
   <div class="splash-vignette"></div>
-
   <div class="splash-content">
     <div class="splash-eyebrow">Θες τη Μουσική σου;</div>
-
-    <div class="splash-logo">
-      <span class="line-greek">GREEK</span>
-      <span class="line-rewind">REWIND</span>
-    </div>
-
-    <!-- Greek meander / key decoration -->
-    <div class="meander-bar">
-      <svg viewBox="0 0 320 20" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,10 L6,10 L6,2 L14,2 L14,18 L22,18 L22,10 L30,10
-                 L30,2 L38,2 L38,18 L46,18 L46,10 L54,10
-                 L54,2 L62,2 L62,18 L70,18 L70,10 L78,10
-                 L78,2 L86,2 L86,18 L94,18 L94,10 L102,10
-                 L102,2 L110,2 L110,18 L118,18 L118,10 L126,10
-                 L126,2 L134,2 L134,18 L142,18 L142,10 L150,10
-                 L150,2 L158,2 L158,18 L166,18 L166,10 L174,10
-                 L174,2 L182,2 L182,18 L190,18 L190,10 L198,10
-                 L198,2 L206,2 L206,18 L214,18 L214,10 L222,10
-                 L222,2 L230,2 L230,18 L238,18 L238,10 L246,10
-                 L246,2 L254,2 L254,18 L262,18 L262,10 L270,10
-                 L270,2 L278,2 L278,18 L286,18 L286,10 L294,10
-                 L294,2 L302,2 L302,18 L310,18 L310,10 L320,10"
-              stroke="#3B82F6" stroke-width="1.5" fill="none" opacity="0.6"/>
-      </svg>
-    </div>
-
+    <div class="splash-logo"><span class="line-greek">GREEK</span><span class="line-rewind">REWIND</span></div>
+    <div class="meander-bar"><svg viewBox="0 0 320 20" xmlns="http://www.w3.org/2000/svg"><path d="M0,10 L6,10 L6,2 L14,2 L14,18 L22,18 L22,10 L30,10 L30,2 L38,2 L38,18 L46,18 L46,10 L54,10 L54,2 L62,2 L62,18 L70,18 L70,10 L78,10 L78,2 L86,2 L86,18 L94,18 L94,10 L102,10 L102,2 L110,2 L110,18 L118,18 L118,10 L126,10 L126,2 L134,2 L134,18 L142,18 L142,10 L150,10 L150,2 L158,2 L158,18 L166,18 L166,10 L174,10 L174,2 L182,2 L182,18 L190,18 L190,10 L198,10 L198,2 L206,2 L206,18 L214,18 L214,10 L222,10 L222,2 L230,2 L230,18 L238,18 L238,10 L246,10 L246,2 L254,2 L254,18 L262,18 L262,10 L270,10 L270,2 L278,2 L278,18 L286,18 L286,10 L294,10 L294,2 L302,2 L302,18 L310,18 L310,10 L320,10" stroke="#3B82F6" stroke-width="1.5" fill="none" opacity="0.6"/></svg></div>
     <div class="splash-tagline">50 ΧΡΌΝΙΑ ΕΛΛΗΝΙΚΗ ΜΟΥΣΙΚΉ · ΧΩΡΊΣ ΔΙΑΦΗΜΊΣΕΙΣ · ΧΩΡΊΣ ΑΛΓΌΡΙΘΜΟ</div>
-
     <button class="enter-btn" onclick="enterSite()">▶ &nbsp;ENTER</button>
   </div>
-
-  <div class="splash-footer">
-    VISITORS: <span id="visitor-count">082,417</span>
-    &nbsp;·&nbsp; Free forever &nbsp;·&nbsp; Built with ❤️ for Greece
-  </div>
+  <div class="splash-footer">VISITORS: <span id="visitor-count">082,417</span> &nbsp;·&nbsp; Free forever &nbsp;·&nbsp; Built with ❤️ for Greece</div>
 </div>
-
-
-<!-- ════════════════════════════════════════════
-     MAIN PLAYER
-════════════════════════════════════════════ -->
 <div id="main">
   <div class="layout">
-
-    <!-- HEADER -->
     <header class="header">
-      <div class="logo">
-        <span class="lg">GREEK</span>&nbsp;<span class="lr">REWIND</span>
-      </div>
-
-      <div class="ticker-wrap">
-        <div class="ticker">
-          <div class="live-dot"></div>
-          <div class="ticker-text">NOW PLAYING: <b id="hdr-now">Select a channel →</b></div>
-        </div>
-      </div>
-
+      <div class="logo"><span class="lg">GREEK</span>&nbsp;<span class="lr">REWIND</span></div>
+      <div class="ticker-wrap"><div class="ticker"><div class="live-dot"></div><div class="ticker-text">NOW PLAYING: <b id="hdr-now">Select a channel →</b></div></div></div>
       <div class="hdr-btns">
         <button class="hdr-btn" onclick="prevVideo()">⏮ PREV</button>
         <button class="hdr-btn" onclick="nextVideo()">NEXT ⏭</button>
         <button class="hdr-btn shuf" onclick="shuffleAll()">🎲 SHUFFLE</button>
       </div>
     </header>
-
-    <!-- PLAYER AREA -->
     <div class="player-area">
       <div class="tv-wrap">
-        <div class="now-badge">
-          <div class="badge-channel" id="badge-ch">— GREEK REWIND —</div>
-          <div class="badge-title" id="badge-title">Choose a channel from the right →</div>
-        </div>
-        <div class="tv-frame">
-          <div class="tv-screen">
-            <div class="tv-placeholder" id="tv-placeholder">
-              <div class="ph-logo">GREEK REWIND</div>
-              <div class="ph-msg">SELECT A CHANNEL TO BEGIN</div>
-              <div class="ph-arrow">→ Choose from the list on the right</div>
-            </div>
-            <div id="yt-player"></div>
+        <div class="now-badge"><div class="badge-channel" id="badge-ch">— GREEK REWIND —</div><div class="badge-title" id="badge-title">Choose a channel →</div></div>
+        <div class="tv-frame"><div class="tv-screen">
+          <div class="tv-placeholder" id="tv-placeholder">
+            <div class="ph-logo">GREEK REWIND</div>
+            <div class="ph-msg">SELECT A CHANNEL TO BEGIN</div>
+            <div class="ph-arrow">→ Choose from the list on the right</div>
           </div>
-        </div>
+          <div id="yt-player"></div>
+        </div></div>
       </div>
     </div>
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-
-      <!-- Buy Me a Coffee -->
       <div class="sb-section">
-        <a href="https://www.buymeacoffee.com/YOURNAME" target="_blank" class="donate-btn">
-          ☕ &nbsp;BUY ME A COFFEE
-        </a>
-        <div class="donate-sub">
-          Free forever. No ads.<br>Help keep it alive! 💛
-        </div>
+        <a href="https://www.buymeacoffee.com/YOURNAME" target="_blank" class="donate-btn">☕ &nbsp;BUY ME A COFFEE</a>
+        <div class="donate-sub">Free forever. No ads.<br>Help keep it alive! 💛</div>
       </div>
-
-      <!-- Stats -->
       <div class="sb-section" style="padding:12px 16px;">
         <div class="stats-row">
-          <div class="stat-cell">
-            <span class="stat-val" id="stat-videos">—</span>
-            <span class="stat-lbl">Videos</span>
-          </div>
-          <div class="stat-cell">
-            <span class="stat-val" id="stat-channels">9</span>
-            <span class="stat-lbl">Channels</span>
-          </div>
-          <div class="stat-cell">
-            <span class="stat-val" id="stat-watching">—</span>
-            <span class="stat-lbl">Watching</span>
-          </div>
+          <div class="stat-cell"><span class="stat-val" id="stat-videos">—</span><span class="stat-lbl">Videos</span></div>
+          <div class="stat-cell"><span class="stat-val" id="stat-channels">9</span><span class="stat-lbl">Channels</span></div>
+          <div class="stat-cell"><span class="stat-val" id="stat-watching">—</span><span class="stat-lbl">Watching</span></div>
         </div>
       </div>
-
-      <!-- Now Playing -->
       <div class="sb-section">
         <div class="sb-label">📺 Now Playing</div>
         <div class="np-card">
@@ -622,356 +153,38 @@
           <div class="np-artist" id="np-artist">Select a channel to begin</div>
         </div>
       </div>
-
-      <!-- Channel List -->
-      <div class="ch-list" id="ch-list">
-        <!-- Rendered by JS -->
-      </div>
-
-      <!-- Footer -->
-      <div class="sidebar-footer">
-        <div class="sf-text">
-          Videos via YouTube API · No ads on embeds<br>
-          <a href="https://www.buymeacoffee.com/YOURNAME" target="_blank">Support the project ☕</a>
-        </div>
-      </div>
-
+      <div class="ch-list" id="ch-list"></div>
+      <div class="sidebar-footer"><div class="sf-text">Videos via YouTube · No ads on embeds<br><a href="https://www.buymeacoffee.com/YOURNAME" target="_blank">Support the project ☕</a></div></div>
     </aside>
   </div>
 </div>
-
-
 <script>
-/* ════════════════════════════════════════════════════════
-   CHANNEL DATABASE
-   ─────────────────────────────────────────────────────
-   HOW TO ADD VIDEOS:
-   1. Open any YouTube video
-   2. Copy the ID from the URL after "watch?v="
-      e.g. youtube.com/watch?v=AbCdEfGhIjK  →  ID: "AbCdEfGhIjK"
-   3. Add the ID string to the videos[] array below
-
-   TIP: You can add as many IDs as you want per channel!
-════════════════════════════════════════════════════════ */
-
-const CHANNELS = [
-  {
-    id: 'laika',
-    name: 'Λαϊκά',
-    emoji: '🎵',
-    desc: 'Νταλάρας, Αλεξίου, Πάριος, Βέρτης & παρέα',
-    cat: '🏛️ CLASSIC',
-    videos: [
-      // ── Γιώργος Νταλάρας ──
-      'aFPerVYL_uY', 'myWN6pIhHOI', '8PsMCAl0Vjo',
-      'bqB3EcICj4w', 'K7g1BWbhQRc', 'BGSGXxKp9Xc',
-      'CgiUaEjCvsA', '6so7dIITb2o',
-      // ── Χάρις Αλεξίου ──
-      'N2QabQMCZB0', 'tn98ApDi0bQ', 'xcfwnHoeZ24',
-      'uvCEXxRi-kA', 'lF3zt_Gj3uk', 'HXyLeF-RjVM',
-      // ── Γιάννης Πάριος ──
-      'yw03vnUpuH0', 'ced9oYFF0pA', 'm3TKQaLa8UI',
-      'bnb21OB4izI', 'a6HC2UeaN4E', '5HnnMc-cYxA',
-      // ── Νίκος Βέρτης ──
-      'USGHMnoXkyU', '-5pDGH9ktNo', 'VD06faANs9g',
-      'Qq6L2F8ae4Q', 'fO5ewrd55_Q', 'QiCnTuXk3g4',
-    ]
-  },
-  {
-    id: 'retro-pop',
-    name: 'Retro Pop 80s/90s',
-    emoji: '📼',
-    desc: 'Η χρυσή εποχή του ελληνικού pop',
-    cat: '🏛️ CLASSIC',
-    videos: [
-      // ── Άννα Βίσση ──
-      'SLcY0ntEvJs', '6gP_FHvT1Ns', 'ecIphyKtQl0',
-      'RbuW_SdQ3CM', '_ioSCtzBm2E', 'I6AIuIaBpUc',
-      '-caFpjGa5TI', 'eGeSdjU1HrA',
-    ]
-  },
-  {
-    id: 'entexno',
-    name: 'Έντεχνο',
-    emoji: '🎼',
-    desc: 'Theodorakis, Hatzidakis, Savvopoulos',
-    cat: '🏛️ CLASSIC',
-    videos: []
-  },
-  {
-    id: 'rebetiko',
-    name: 'Ρεμπέτικο',
-    emoji: '🪗',
-    desc: 'The roots of Greek music',
-    cat: '🏛️ CLASSIC',
-    videos: []
-  },
-  {
-    id: 'greek-rock',
-    name: 'Greek Rock',
-    emoji: '🤘',
-    desc: 'Trypes, Xylina Spathia, Socrates',
-    cat: '🎸 ROCK',
-    videos: []
-  },
-  {
-    id: 'mad-tv',
-    name: 'MAD TV Era',
-    emoji: '📺',
-    desc: 'Τα video clips που μεγαλώσαμε',
-    cat: '📺 TV ERA',
-    videos: []
-  },
-  {
-    id: 'summer',
-    name: 'Καλοκαιρινά ☀️',
-    emoji: '🌊',
-    desc: 'Hits που μυρίζουν θάλασσα',
-    cat: '☀️ MOOD',
-    videos: []
-  },
-  {
-    id: 'hip-hop',
-    name: 'Greek Hip Hop',
-    emoji: '🎤',
-    desc: 'Η ελληνική hip hop σκηνή',
-    cat: '🎤 URBAN',
-    videos: []
-  },
-  {
-    id: 'trap',
-    name: 'Greek Trap',
-    emoji: '👾',
-    desc: 'Νέα γενιά, νέος ήχος',
-    cat: '🎤 URBAN',
-    videos: []
-  }
+const CHANNELS=[
+  {id:'laika',name:'Λαϊκά',emoji:'🎵',desc:'Νταλάρας, Αλεξίου, Πάριος, Καρράς & παρέα',cat:'🏛️ CLASSIC',videos:['myWN6pIhHOI','TebV8NhFjkU','SSWtQp_pV7c','LDppuT1GXFY','6qfRQgfqE54','aZ8xdBOUNp8','bVNQqQiaz8M','47dhzOQr4NI','jSzSh9Wa9II','-deCwxoP2q0','RH2F0AJuJfA','4dtc8K5hsD4','6Ye0NOn7nrI','mQkIg8Rg3m4','ehDmiXZ4OXE','281XnAnkXQY','CIleulcZPnA','XoEotBlSHfA','2CyD4xGG6mo','XQ18mY5yPQA','mZtcZe8avI4','kA7Sd6Za2PA','Q20n2_GMLM8','hOL1jCMWV38','xcfwnHoeZ24','GVZyyHsLCnk','BGSGXxKp9Xc','k2Q1tKv4goM','oVXFMgHZ9gU','zwSGsy6-obo','Wp9KY1G2m8Y','sTyGh6edBRQ','kZ6we4UVuKY','jqD81gmMxf0','sHhuIV-e57M','eGw4GVbb9h8','uvCEXxRi-kA','Jsx6qAIdi3Q','tseV0fanLgo','M2_c7poy3zU','HsW1o0uxbiI','LWHg1wwd5Bg','8I_LQOTUS-E','nvrUX4u5p5I','g-YRtOU2BdU','ROU8HoCWgEA','k2zbWBhkrpg','CQBCFVPEl7Y','sT9Kl8EWJzc','_hBOZYrXSvo','AAYl9M0hP_0','Co9r2-RsBD0','5rPL98AMAy8','cmHGP62X1Ew','Fmp9Je3A6RQ','0GxDvGdH7S4','aVYxkiaKj5c','7DyaRNgVpas','3vNyC-ebpwg','Uja5nSH_-a0','hXsz-f62n-k','Qhl2MnbZAps','Q3i1R-S3pDA','ncvEeRoNj0o','VD06faANs9g','-BVQiiBTqH0','3wPdlslxB2g','eLBw4VhdaiM','Q5LquyI4aB4','zaPlyUxFJ1M','o7_EUv3a4gk','w1qYIxJYo-c','t0jtKdhwwX4','Z5PExqo8UXE','fGjq6WYvle8','cbtw_n3puZw','9xqHvVjQH2Q','npOLeqpGlmg','USGHMnoXkyU','nHfF47fJE8E','kkmbkg6aB00','K7g1BWbhQRc','lgJSiSoxeTs','aFPerVYL_uY','kpZB8tQOjEw','bqB3EcICj4w','koHgUJ6fxjU','lF3zt_Gj3uk','He-1QzMyvqo','rFa_Yg3V9cw','8iXNOnzJaW4','Qq6L2F8ae4Q','ANnYx8o13xE','ju4DzblZcYQ','CgiUaEjCvsA','CKWlmlWe6QI','z7o88TWAgJ8','URTyrHywmKQ','1advxB2nhuE','GV4hp4xxcn8','ACY5eSC2RII','CMQORRJVZfw','B2NGmXnRufk','C-2TQMFqkHY','I_PLHdMNoN8','PBAg10F7CPw','l74_8-K_7Mw','ZDJ8RNMAp_M','oqRtE026bas','y0eQs9NYt2I','lyyHms64Z_Y','HnfAG0VVCOI','Rc0M7NuzDEU','2U8WpYYsDwU','lGcks_uqXKk','wgvgmJ4Uyyw','kq_q-53ti1k','FCNZbQBYR3k','nt6ILvYe8gc','XY11dXT28oo','Roltz_Q_lQ4','h-VH6lbr168','CIAY876Uhis','sg5xEdpnHaE','tn98ApDi0bQ','FmASB4wnfXo','8PsMCAl0Vjo','2cNKISA8UK8','VEiLSFJwS4I','ONMbPQi8JwI','j8pbGRcxJBI','1FiC10kWccE','PhpFF4dRWIY','ngepZfVr5b4','-5pDGH9ktNo','Re4ICO9qIxo','G-shHxqhn5c','XKtjLGqMn0E','HfbRjMTz-b0','AR6Y19QpTBg','SMDLYFO8PuM','ZSm3klSqlTM','5Dq67sVUsVM','aoDQ2d2Wz3U','UFjbMJVIYT4','hBwpgqbVCJ0','mC_2tY5Fg2Y','rxQPHDJRWvI','N2QabQMCZB0','9v676IJRJqk','ko9VLeqI9no','ftb1nb9K8N8','tU_NWX-H-RI','_fDRMhDHGOs','WnIEg7r6_q8','_6XcHoqRcPc','EPGCmWcDvpo','xxiANQUq04o','MEvdZRHDuF0','ARk3sgIZwVM','trQzKWQyylM','0JlbAPurgVA','7LON22CUvTI','7wD2U-0NE1U','EmCV8m3zZXE','cjNJra_NLLk','PEbMOa_r7pI','JS6qAqZkUEs','a3Qp9qY6TbM','khb3Z3KknUE','d9R-h2j0CvU','e-hJ9GlYQvc','FBwJZHVHC8c','Pp4OrVthZUE','JOk8L66utlE','xFNDASoU9y0','CU2jgzdqSFA','Ae-gtqM4c0U','M5l2PmKt_4I','9y8GKJH77ZQ','gMzzIHbDetE','lAbXyVNmcTg','ZvUjeecIg4w','sGAdKdEAGGk','sKnkd64rT6E','4KVM7rVcLKo']},
+  {id:'retro-pop',name:'Retro Pop 80s/90s',emoji:'📼',desc:'Βίσση, Ρουβάς, Βανδή, Παπαρίζου',cat:'🏛️ CLASSIC',videos:['OV_OUKWav0U','gPV8kLMdsn0','-FpEtur24uI','yZ7S9HqPIew','T1DjHo-ylh0','kwNOT2ZEOMc','1VMqpq7gThY','XQRVKIjNZCM','ybBE3Z1HNyc','XGz4vbJjnkY','SLcY0ntEvJs','jep44lwvUVs','oJP6Za4FfVc','RqVCD2ephsw','HmkxjUyummw','YaKduwdv4go','lwnqkh3z7MA','bK6lVVP8ISA','QFtqQAxiNjQ','5LrGmEhEUMA','tHVdbeTtZuY','J5qampgVri8','6P21De1fbhg','o-ldt4tIdbo','Oms704x07xo','ASpmPF6ttYg','BIjjFKaHngE','qj1EZ8Y9Bbk','0QWEWHHwjwQ','KuW2VMNArKs','wuODf6AbD1o','4U955NVUSBo','LUgSPPZYT1U','_ioSCtzBm2E','6gP_FHvT1Ns','eTi1zpNRg68','gGIl9N6JwhY','qMv8dpFQQPk','GOEjY0r-iJc','vWxAi7F6otE','w-FUcCSvf9g','L9j9fCHHPeg','Lxex-c8Y2Cw','iDnpSnjsgjA','Td13HMUc0N8','N7IF_BU62Tc','IAW5mM-jwho','LasJZcZPS4A','v3UkUlpEqr8','VDwhSKs0tdI','kXwRXW3dqYQ','V76GJ1ndYIY','SlL3u5Jqbsc','wTrESDwOuyg','kRtaU079Imc','0Y7OUTfDmzU','bLjO-trbsNc','UPcWjzUWkmo','ct06lsHwCZo','0le65Jq0adI','kdJpLYVeWnA','UidkFTExb2g','ZHM11hpsq-Q','OGegIY0hOH8','RbuW_SdQ3CM','vdC-OXNfg8A','q25eeb9YyNY','NzUu3m1DJtU','MRUb1VK_nkg','B2S2LBagy-w','YYDKGJY1q8g','Xv8c9sT76A0','5MUcHW0-_Qw','EIMqOAwt4p0','wMF3xPdlOIM','wrMjY8CTCDU','2XHb4vfYOpU','yeC9OCVQrts','YdfscNpf3G0','xHCy13ncsv4','IFsSwz8_dC0','GmFLRVlUo10','72G-frE80zQ','QKdIAT4vERI','G9MnUbdhCa0','T6AY_RgL8y8','r0CmpaSV0tc','viRYXp52lwI','LsI6L_3F6rc','hVz0CF2VepA','JlQlYYkiBe8','RcU4sf0nCZQ','YQkgcL_drjE','4gy-H-1tbZ8','6ifU13k4-I8','WZuuWiTK_Hg','ATXEnywdAD0','GgFrIqph5EI','vOWIuAX0UK8','R4rM-6eQMlc','AUQrlDpxezc','RzBlmqoPEHI','l1p4fbKqv6c','UNSh2zaWM9M','TmbZOJZG59E','vGqRbmwtRHY','gPbMLhwgJN0','hi7duldQkww','_EfAs3Ch48g','ecIphyKtQl0','FRxji_kvaAc','OLpibsnLssg','jaPdBG8iF9w','-2Kxx7GXDdM','MwAcErpAaec','mLStPRaDCYg','ZwBIuIig3jo','yX96EjbHzgE','lyyXsDytwnQ','OiVdjfoY8Z0','oAV8nqlCDso','-T8ypUYpIco','fr1YFqN7lAk','4K-EMTW3MHE','90zR0MM3aw0','o3rr-e_QIow','ot8wXgTE5ZQ','aN1rGufqfjc','jqD81gmMxf0','CVCfaOaqCj4','_TnfJK3SHPc','I12boWmWOLc','Ue7cCFlrBzk','tq-eqJJCXbA','qlylahbIBTQ','LuOJW72sf68','5BkCNgAn41A','y26ciWIIykA','xJGDOtp84oY','B0g_aN1I6yM']},
+  {id:'entexno',name:'Έντεχνο',emoji:'🎼',desc:'Θεοδωράκης, Χατζιδάκις, Σαββόπουλος',cat:'🏛️ CLASSIC',videos:['IHRFOIvQvbA','21_Dk0PuW14','o49St8n3QDU','ziKey8wEHCg','zmOwwgefAIY','CKBvVYDviZ4','AtxizoHaKa4','Ya7uzKWGURE','m3BbQCn0VmQ','0d5LUfJmmQU','cNhndF9OqvA','Ec1ALmq61OM','yAYotlaW4QM','q_tl9Jp7IBo','upevp2TQQVg','-ZnbYAbq0Wc','aWKgQ90LdeM','E7sMKCNSG3I','Oq5Uiabz6gI','WqpxZjSqfRQ','jYxRYptayk0','1uQeIAK5LWk','tC5XH4jAIaY','VUFL1y4khe0','wk7ymAoZApY','7Hsma2YzmmQ','5q9H2cd36RU','nIl7iELFhGU','ExiTsYH-ETg','hTfiwgKcQLo','u5mELonD60Q','B-xsug7Kdwo','AAVTMJ7HKfI','3ZAFBReSZX0','qLn0B2jI3nM','xJBJBPa0oZA','PxXykrDceDE','K4rJpj_--O0','LF29k5Havfg','niqrjP1VDeY','hUJnSJ4KQtU','a9CjRAwUdFU','I-sLzMYTI8k','6y5t5IzwSsw','Zq6rkbR96LE','AHRGjRZDD6Q','RtYEdrg8GPA','kXKSxcPv--Q','a5Hg94DY-Ks','zlh6x2t3bsE','5IDIdWEdlLE','ZEAh9sM4TdY','7r3RT0-R68g','eLBw4VhdaiM','Lt77RSK9zi8','LDppuT1GXFY','sbEk-ZXm5Jg','rBrqWXWswAI','eoC6nzubAL4','7hYluL2XGLM','vFwecN4Flkg','8om3KGxCdvo','MmL2NmBRFKM','oQNu4gmXzV0','4YW4Ag9vHSI','4v1Sm0qjCjw','hw-Sho4sxuQ','90ji3NlJFGI','7lkxv0CxAAM','pxxZyVqJibM','bVeNckqwB7E','5OdVxV30Ids','uRO1YFgSWss','P4KqgWb4NPc','IcZ0s5xYoiw','8JNWCbC2F90','s6Eh82vQ3Gs','gq149UVURLY','s6Jd1iKPCJc','g3HzQAx4VSs','LJM_KOXSyP0','FDbQp7b2Yt8','EDQKkTXDu-c','oVX2lv_Js9o','8QKVDrGdaJA','hSS11F17Y1w','uqOyQNDwkZo','T-TINkNA8vY','QkWeW04-0N0','g4A2nzNPFNE','JZafyvgCPmE','iZ6JbsLGWeg','s-BELwDFXUU','j_rqpk8BfTo','1E5yT2ZsOZY','zxpXjQqDmlI','qFqp6tHwYhY','eUyRQvxWvt8','0VUCK3iOg0c','j9LBHalF4ps','gtuVFwSC15Q','NLgerQJo7zM','U53uZQAhyPE','xzHGRVlUAro','VK5s9t5GoO8','E6qDaBqAbsM','QskFT7AaKH0','LGPrGhATIwc','gHqzG5OZpH0','th06e8iuG8g','-HEyVe8ZBy8','DKRGHKLSrpk','uIxB89b_nfs','VR9iNUFh9PI','2w6Atn7kwEA','CgiUaEjCvsA','H1bLKK6CO5o','uFCcyhBIHKg','HFl6oa-FurU','VTReB0eakWQ']},
+  {id:'rebetiko',name:'Ρεμπέτικο',emoji:'🪗',desc:'Τσιτσάνης, Βαμβακάρης, Καζαντζίδης',cat:'🏛️ CLASSIC',videos:['5tljtspxSmE','ZOD0oK-R8hg','aTPmf7xOwJQ','tI7RXMCWXP8','UipfIQ2f5f4','W48q3xI1nxY','pE7LHOYiIzg','UE3S2llHYjM','yjOIRYSawgA','E2TQ4chwOg8','lZrDKyDhOcw','2qK9JkW6Ikw','3q8L_d6QKHk','HJeB6zAsKx0','TDnQPx_cOSU','tPLUrYpmNOM','JAev7OfuyMo','P9N17eHCJv0','Q3za0Z5fZWU','niLky_wF884','QZzrWaYbJXY','4c7RcPD3Y2Y','4vNDRlWYIWg','edGkoe7sXHY','8BtP8q42IGU','yGkUjownTqI','hA9o8t__hhU','YscxhqYIxI0','HBt3ktpIUtw','5qOUZ2r_S34','3A4T1FNPHHI','s0UuFh312ac','I2F2IhKB4Ik','ayasiJKRo9o','tsqo8pEWwRo','6DLL2G1Ddu8','wQGjHq2tMP8','NeyY1VlptdM','2WkqHwsPt4Q','L_boGdrULFo','yGZOz9Llzk8','63sHjALGoA4','IV8be08YG3k','PUAJzXVcPjQ','oRJSKSsjyUM','ybAKgyDu2cs','YzVmzfWYjKI','kp_j0FJ-wMQ','ervNEC0rvqs','clVAv2nf7i0','caQ4UPSUMH0','GY7nCHtWW9A','GqnrdU568Yk','ZqDeVjZh8uY','-K5D_lVMYDE','KzPP-RDxK2I','gZ8__Sbv-80','awfCAWeJDlA','PsS8KWgvdh4','Dw-5WafBYpE','7R23DW4Wz_M','-p4uXToro2k','QKdIAT4vERI','3OXYHwO6VhQ','isUNAODu7LM','fJzNHag5xSQ','K37zwunBFhk','pyNG9jD8UJQ','JD6aRnEkAkM','yuTWdVn0kn8','0d5LUfJmmQU','n6UGc95yIaM','QAQkYraGLmo','umzN2ujyARY','_5-FEq5Gt14','qnUZJgrqTlI','yBjgyM2gD6U','S3sAtwmve_4','ztxBYWUXYts','hg_A7fo4QH0','E0wxMYv0h4k','Ji6ugZ_9GKo','BrGIy73XR5k','pF7ldspZ6-g','4GbrIBzH08w','zXOcoqLUdgw','Fr3CUyz2sVs','bxcpVcYdYsw','FJXcku7ofQY','lwuHF0gv3Ks','VCuq6iliJFE','9GvpVy5vP48','66X1DAIsBhs','Hn56TRpk9k4','a5R9iUiVMj8','EXZ4T9XSu5Y','7quGvFtsW3s','qpW8zUIhf4w','FXQVtALv_j4','lVvjjLgwVoU','Krjqywk0s_c','aZbsYiv4AN0','qYTH2sv9CPM','5F63DD6beGA','LO8k2FHm8XU','UuYEXzI8nhU','ZH8oGDbHuJw','R_Ld-aAEVag','23bjleLQjEs','fY4TTM2UcHI','Qt24X09XN4c','BX95LGv4CtE','yw36yk7FcJU','sQ6VyutgPp4','yT_xydBSzQw','UXFILjChVAs','fbkc0LZCrqA','rY5qpxazNec','v5fBHAVuvV4']},
+  {id:'greek-rock',name:'Greek Rock',emoji:'🤘',desc:'Τρύπες, Ξύλινα Σπαθιά, Μάλαμας',cat:'🎸 ROCK',videos:['X3je3XKTKzQ','aytFh3B_Ex0','D-D4O94Xetg','-_BiKXbz4bQ','zJ0j-18fCWg','exeEzy63aj0','-Ulm6P9IP-s','gytGdps9QoQ','y1QFGD6L9ns','acI2-10G4xQ','6paAOlcO5Fw','3Zdp4vDjMiI','edCUR0Pqxas','GCVH_isFU9g','oLOeAD2kPz4','D6gtPwteXIA','s53kYJjSab0','mMJ93q6jZpc','wXYPCRubFwU','_S6GIC6ot44','Hwm1L25TGlA','bGKYPKJUq5g','fKWC4Tn4KXg','wyPL_0l7KJE','pGl-lZSHPio','eYvO1kYTmDk','Trzb1eQEQI8','Eds_ME_Ww6I','2qCzf347xEA','LBLpLO6NSG0','VcoCrJvLGEc','R0JpiaThADA','gupaRpjfUy8','shJLKq62oT4','FAwEQTwUpls','6RgQZE7aEOE','jRe4RJFoDwA','spyd_ViKd8s','F96-5NZSrsI','h6RVn9eN-C0','U94wMJBIsNo','6Y5i2qWpMqg','5GlNWlsmj7s','E3bSi8yo3tA','w2tvRUh8GxY','dfYVNjtHme8','zxYJ39Sy_EI','QjN1iaTvNxc','sXzfXk1HPRE','SXiUwfdkAg8','zHptoSbH3lc','E_g3WFqLKwk','9ipV1EmnbIU','svMOKb-aWhQ','4JRDUSytNaQ','ltdD8XDdNrI','Iflj2KICnBs','KkgdJmLmbns','r8Eombg6PRs','yGasqcHWpxc','9327MlAqlXY','gwHSH5yoTR4','XwhvUVLu0iw','Ci97rqyYGp8','8YpeKrR1Qrw','nmE-rvFw6Dg','dBbhnW2-eF0','PU9UDuiqHOU','yCnersCIQBw','CBabLCTXUxs','C33EHWOPXVs','cwjxJIysFyg','gZi8YoIvsaI','C2qoYZnT6Jo','SR0NNl4I7NA','JpV9KRX_qLI','F272axF4zKs','94CR5mj5vPo','3SZ6cf0EkAM','L7EmX6NYnkc','cQaUoTkwjEg','TOzf4yEThBM','5m-CaSFvX4o','zTQVmwpfKns','zQyjWN_cVWU','p7IRo9mXJsE','4057WIP2tlk','YjPKHAKTqtQ','PkVOhIX6dVE','c-MIQkAk0YU','oSxUN0CPosg','gv_KPiEfc9s','ZB7PIHqUeUU','7jB2rEduYKc','Lvrdj-XT-c4','fzJI1xN7QfA','gvr7huCUQTw','RSfoyR0WOWM','rLDJbdg_svc','wD90LWXdCwg','V8bUPNE1mhg','1MBYaCVnYf8','_bniFgkQ-3I','OqR8RFlRCnI','IVbEsR7-VwY','rX9e6vRV37Q','yPFfYEDuV9A','JuwcQnuHS2o','cOPq_E6rJTQ','9RcY8L5ubeI','VrX9IZ16iJY','KS9wRSyrbZ4','GFDE0RJGB5A','7vmsMCM8pus','CdZK6TA-ylA','ZmFi35heFGY','0VKHskfYPA8','liVJdOVaOO4']},
+  {id:'mad-tv',name:'MAD TV Era',emoji:'📺',desc:'Κιάμος, Παντελίδης, Δάντης, Φουρέιρα',cat:'📺 TV ERA',videos:['54PHdAEmJkM','MKY7IK8heQk','lDWOtdsG8QI','XTjLTaqLGtg','SvMISP5Hf5E','nZS8pcXauU8','UIONS_fhUlo','EVIp5D4BzMc','daGLoE-6oB8','lPsFqp3H6lk','fLLfdyFC1VY','6jGxdcfUIj4','agWfvdkWcBg','fPQZAU3V0Y0','8_rdj-yCCs4','NbnshBdye0g','KonRqeQh6Ic','QUWB0DL24cY','_mFnDrSysbk','H33RqDO_dgU','-q2CZtfjJgc','4QYLh8EZzHA','8dHHK0BuUMI','zrn4x8Sl1AY','b1_pFxAh3I8','yYyXl62E9jg','wkgdy0EuVKo','WMB6D5OstyY','DEGFUP95lFY','p2GUbgccgcw','q25ykd3kRmo','gprpVwx2oIQ','VahYdGq9K0w','j38oAewmWEA','H1jdkU-wMLQ','3chFiXINmhM','OtnbM8SrcVk','PdFFvK3_zQc','YAYZQ1-hwic','Q3Wy0Zwmwtc','c0l5eFgUoqc','snI6SY-YYKw','Mp6-RV3CPtA','hoqRj3NHcA0','4DdPBhB2BOQ','E3c7ghGS-3I','wWb_fdAqEAM','3vvDSdTjeBc','y0er6pQiZ2A','UmUktVevHNQ','kuhLIS_TPmQ','ElItWCnFUjs','wlvq9ZGXrCg','YFK0btsBi5w','wo1V0XXNskI','cqrszsDcIXk','SIV19DCu0t4','SI7zI2pniB4','oq4qE-TYD0k','x9HaLmXTGus','-5ek4aXxTjI','gtbA7EbWcSI','1VGIHNLtEpM','WxOQFhz2uBA','I91ULFaBDtY','-C5Tsw8H2Pk','i2ZzNVMB1Qo','GPiPMzVSyYw','Qzow7Rz40gs','c7-5nWj1-PQ','ZM7i5aA1R34','oC2CYlkYREg','GSSQcygTfjE','ZwcCgh7uX8w','KBYs8g-Grn4','i_ksoAjK-EI','K6l6ztc2qJc','QrEvZH_NgNQ','spDEv4QKLS8','UKijiJY41js','7UzxaMJNmuY','Nk6Bn94d-kU','5oc3DbkCXtI','Ou2c62SiHvU','mDpt6CZwF7U','eQXWeQ01HhU','bj1JsHCMTRU','DwmjA2Kucmo','VOQdKVVGsj4','ZSwAtliZB4o','pGtPNZw0FxY','a72E_0THra0','q9XtXsAwOVs','LVQPbbUXng0','F0xdYaptZ0Y','EWGgzODr4i0','pPIKEtOe9r8','b77Mx_QR_4c','jWmAktKU170','_ueoHHqLNtY','j2A6Td0kpb8','sWCDcCvb7-g','RkUJkSJrbqc','TURvYLoMLgc','7pCV9Vymi0I','U0kSJAyOzfY','-9RjQtMzfRo','nW1yBCOk8fI','SOfm8H8K3WA','9BTRODxzZf4','lJtFQzhk3zs','Oo3uxWREONk','ihOSNR_N_68','AtZGrdMPDgU','Sv5TCUMx1qc','girhxLIY5F0','MyYzePJMFKA','32rUfRUcSZc','73IGG9bmR0M','1C8lMynl0tU','X8XjMK3lsI4','8TH9XeLGnsE','icQeiq5hZ3s','_geWRNc4-gs','JdPngMCk75s','6NDytPtYM5c','xyswISIHPTY','Py0_HA6_AJM','2UMwaVD-wWs','Vj18goPMIQI','GYgQ612bueM','TBcWFgFKU3g','bHfSmTpaqyk','znfSSGadCtg','Imkj5BKsNgM','gLJhSSjeRsQ','E7eipJVW_Ok','Y9LMmqvjTF0','ubhmWKJ9Obc','_p1zOSsgiMk']},
+  {id:'summer',name:'Καλοκαιρινά ☀️',emoji:'🌊',desc:'Hits που μυρίζουν θάλασσα',cat:'☀️ MOOD',videos:['wteQ-VXqsrs','gxrN7CzsPxQ','LsI6L_3F6rc','5Wp5QRvaU_I','GmU0V1luj24','tSXdByvSKaw','PJ5yBmWb_OA','pYXJ5Zl3Opc','IPZXdXOUGH4','p-3sTTrqe_c','JlQlYYkiBe8','DpzGp9pnbdE','tNlexWv7KLc','m848MbSMyFU','aP6Q3a9SHnY','5juMI_oCV6A','xfdAW7Qa2r4','V5ZmCJVCgk0','D9ItWBA0CZI','BJumSKJA9nE','G6OYDUomYwI','BE51DaX-XXo','fsPCUKZogeY','BIjjFKaHngE','u0vhC7-e_kY','UTIGjA2jNuQ','UKijiJY41js','QUwbXKkv-ro','_6X3_dEda4c','YSGyLElFeco','Vwu1Vq3ix1U','EmCV8m3zZXE','v3UkUlpEqr8','MYXTObAos5M','kSep4dFioqE','TmbZOJZG59E','vWxAi7F6otE','Y3zhIP6eNlM','7e_2qb_pWrU','GEbTmFcg3uI','rwyR5tSJoLI','1WICf3q6CUk','YEZGAhOQij4','eJQTznlYy_w','PrJYl_E8o10','pwafq8_wBhM','pd_dF5r7XKM','RWgk36AzKcE','_roE1N7Urio','p8tFruagSRo','kD4hd0rb-IA','_zCRdJbJ5N0','QH-U89OUv-A','1lmVmAEsZJM','QmmtGEw2z5E','Bj5pNsY6rgI','e9N8Z1yjbvU','ARk3sgIZwVM','BQdFQ8wddlY','SGOMoQsP4B8','qUVeX_ZtMdI','NmaWenqli38','l2Oo77uY6lY','0YnM7KpWNv8','8hhOIUkA7Fo','hO51mI1FBdM','Agjhe8Wm5-o','77MBm0U0bqc','NvY7Tqla-1o','mDbxTzqZf4Q','CZdDS7T6qpI','2YjIVTASGt0','nVB1B9UpWtA','2MrydmxcyAY','hi7duldQkww','IVmG6Qn_fv0','7rKWSPwKXUg','hXLCYRN4Pg0','bLjO-trbsNc','11_ZnTtueAU','3nZlHi8flKM','EM8dngPwx1Q','EahOCUXFbvY','WZuuWiTK_Hg','12T7Kbm5f84','EIMqOAwt4p0','Vb_ZhJ6QMM8','q0xlO-8DUSk','7XUy3wSE1xE','XqxLy_f_wuk','19k6Nz41uvI','hUQpnA5KO04','InejlsKWV3k','AqE-MYLYzy4','xiQTKJuwdR4','D2ha0AfLQRc','tBS3ondMU60','5nel-Dyjz0I','oqVkkBgxMqs','iohTYAUcmI8','8tFrwNnUdNI','ZvC7gTCPe8k','iFLF-56i72w','0mepv7YYLow','bVLOjnTl0Eo','S0laFcVnBy4','wPej1qtg22g','zGbAkJD8hEE','ID9KwoRq748','XKbyCt-KYic','XGz4vbJjnkY','09O0MZObOVo','kBudnjak-Rw','0le65Jq0adI','QJF8MCm7kRo','8GDCYXosp9M','GPo8uArIUg8','Zczd3ccw7Zs','8kpdxZhsIu8','GH5BmHIcbtU']},
+  {id:'hip-hop',name:'Greek Hip Hop',emoji:'🎤',desc:'Mente Fuerte, Stereo Mike, Μύρων',cat:'🎤 URBAN',videos:['4CZaq-FqErk','OwyQu_RtqDA','1st7DZr2alg','HYKXR6lwp1g','XsAPNlUxyw4','alK5dRh06vk','QHNVYbY0Ihs','8yQC_WtuN4o','eqYV6L8lUVQ','GijWkGUfY_A','ACuTlp4-YtY','iTAfpwImuOY','zThJIvhHZqo','5l04G9dQwxo','fIcxexQN76c','mInPF9tRC3o','G5s5uaOeraY','3chFiXINmhM','tP1GHwQtJ8U','4kAMac5CiRo','SrU408HX6vM','YgMMaEj-pc8','zF5eEUahTj8','IRYeKsXCxdg','ncC561jQih0','GoUMmUw88pI','p8pBkwJyQAM','-t2Khv6MqNs','Ghj3kp96xwQ','Zv_GS-rgQ_w','Z2DIigXOZZg','01J7nFdGRTg','vWxAi7F6otE','vW22Xh2LrL0','rV1zb16tORQ','HGdgheC3ijM','0t_UhTPH670','b9JnwgN-yWM','Tv6PcAyHO5w','1oPUAtQueLY','40fdQxZUz44','rmU3TGMuYPU','o9V6dV457bQ','P_r_o6znlYA','BhIIxP3lHek','NGykbBdUuF8','4_Mu-N2C7H4','0WcmI4pfwaI','om9ct_f5wJI','31v21jPbpuk','tXu2LhTRUV8','CUT1vRELYnM','xm6KVjMBNP8','lovWZEqGQoU','s8hFhDyAwXg','ABu0p8moLak','EPdKyl5vpas','eqVBH1tanYg','WITSDC-A9kw','O5cS6YE5ogY','vggrA06MWNM','ncvEeRoNj0o','A2GqxFJNlhw','Nrog43iGYRc','vyEZ2bk8ypk','LpcxgQtbves','IVbr6jtR1-o','adWiayCOwAc','QcQnOMYEufg','l3DwynblAEg','FARusvjwtTk','rIkmnyZmfyU','rhPErmXGDg4','BELSK0yhM2Q','owHX0vflJDM','AlNltwHLhZk','Z-N7bNw0R9s','dRPoDvo-QeM','H-bajaMwQgs','aqERdYZQDc4','qK18AjtVYow','rllymJsJ5T0','9qHwpn0SXY8','OQpJLvaxFqc','8dqM3ZKEAt0','8DMYxXK5hDk','526uenTfyNM','ySivN-6oE-Q','sgqcMsYvP8s','ObBtPYjod30','oeBPBiVIV0I','EHRcoCBa1i8','DN1pdRVlG5s','dK7Bgb5hU4w','q7E4-I8wQfs','ffhXHP5vgpc','dKnhHynhsFQ','jUXlEWQf_o0','fTnRtWxIYMw','gFSKTPgU5hg']},
+  {id:'trap',name:'Greek Trap',emoji:'👾',desc:'Snik, Light, Mad Clip & νέα γενιά',cat:'🎤 URBAN',videos:['WjpdyM9jlis','1cYWvOQ0zLc','HzGcza2hmk4','aQm8rDth6mk','fbtCfcGHznQ','_gXOfQ31JNg','Ix4ndHImTRE','rhPErmXGDg4','i47aL-MuSN0','NkGwHumCcPM','QsXVaMccCss','57sR-Uw4WN4','vRv_RoY3LC4','MyTMg3gopjM','K9qGCNOIf3Q','RsqGvsFTiKA','RnAJjXuY5YM','qcf193e0AeQ','neFuxcDcuq0','3J5DnBq5adw','gFMwHR7NOdU','MvV9dDxClgA','KIHHpymL6ww','DE9LJ7b7mAQ','e2CjsJzIXQc','_Cfv8nLCDHw','i7lw8xROWOo','RjAlHY6I1vk','AUKzhRgja5E','nP-jLH0JZls','9jTAjs5vcus','VwBj9kg6A7g','goCWavqGTU8','EBev9JCkvrE','9W9zKM48wPQ','Hw6RFGzbc5Y','90C8loBKDnE','iVbPjEyJ-oE','hPh1yl_shzo','YrSeF3K27PU','nyF-OVqzwgA','T95IUloplqA','fSjoVaorIZQ','F42eANosMjU','j6dBIuq-EuU','6TbKCjfOdZ0','3eMCZsxKxuo','i-fWyl8DsN4','bYkeXwJOmkw','6drmSFwleC4','cesmVDflgZ0','a0mrwqQcD0w','d3l3viyepu8','9P7j24cJgdE','JsMf0v_7kXA','smYUyni5UY0','vGX2OMhZPHY','pudRVXToioo','9CExzamvjd0','p4bdPdG9lpg','10HbaBKmGkI','ECE0YpgHVlI','CJIA_RLAX8o','5-yN804D5Jc','SnNMgIZqfT4','CoAHmnmbaWc','4k165CvI5eM','cFIVr43BxCc','U_euzq2mkEo','jc47uQUew4c','47KaEX5Pc0g','QQrw-Kmtla8','OdFQVKZHmOI','4DdPBhB2BOQ','sZ7bKuMIbOw','Uktanx8IWg8','aVsowqZHEAY','_OYQlL1VbhM','9yjC25Xm2DI','nWTGTGRtmEk','P8o7S-_nFi4','joC_TPvApbw','xwtUiMxgMT0','Yfc1J8VBhno','-Fg_jc71Dog','s124I75lhLs','oz91N4ZKlWM','zGOHdAO8jEw','E2uYN256Jco','1LWxn10YOeA','V1lAZ5OQ6qI','ZF6A7IG5qlM','Q54BB620U3c','G2Q63fOfJLo','KG7dVlpV9zg']}
 ];
-
-/* ─── STATE ───────────────────────────────── */
-let player        = null;
-let playerReady   = false;
-let activeChannel = null;
-let videoIndex    = 0;
-
-/* ─── SPLASH → MAIN ──────────────────────── */
-function enterSite() {
-  const splash = document.getElementById('splash');
-  splash.classList.add('splash-exit');
-  setTimeout(() => {
-    splash.style.display = 'none';
-    document.getElementById('main').style.display = 'block';
-    initYT();
-    renderChannels();
-    updateStats();
-    fakeViewers();
-  }, 580);
-}
-
-/* ─── YOUTUBE API ─────────────────────────── */
-function initYT() {
-  const s = document.createElement('script');
-  s.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(s);
-}
-
-window.onYouTubeIframeAPIReady = function () {
-  player = new YT.Player('yt-player', {
-    height: '100%', width: '100%',
-    playerVars: {
-      autoplay: 1, controls: 1, rel: 0,
-      modestbranding: 1, iv_load_policy: 3
-    },
-    events: {
-      onReady: () => { playerReady = true; },
-      onStateChange: e => {
-        if (e.data === YT.PlayerState.ENDED) nextVideo();
-      }
-    }
-  });
-};
-
-/* ─── CHANNEL LOGIC ───────────────────────── */
-function loadChannel(id) {
-  const ch = CHANNELS.find(c => c.id === id);
-  if (!ch) return;
-
-  // Check if channel has videos
-  if (ch.videos.length === 0) {
-    showNeedVideos(ch);
-    return;
-  }
-
-  activeChannel = id;
-  videoIndex = Math.floor(Math.random() * ch.videos.length);
-
-  // Update active highlight
-  document.querySelectorAll('.ch-item').forEach(el =>
-    el.classList.toggle('active', el.dataset.id === id));
-
-  playVideo();
-}
-
-function playVideo() {
-  const ch = CHANNELS.find(c => c.id === activeChannel);
-  if (!ch || !playerReady) return;
-
-  const vid = ch.videos[videoIndex];
-  document.getElementById('tv-placeholder').style.display = 'none';
-  player.loadVideoById(vid);
-  updateNowPlaying(ch, videoIndex);
-}
-
-function nextVideo() {
-  const ch = CHANNELS.find(c => c.id === activeChannel);
-  if (!ch) return;
-  videoIndex = (videoIndex + 1) % ch.videos.length;
-  playVideo();
-}
-
-function prevVideo() {
-  const ch = CHANNELS.find(c => c.id === activeChannel);
-  if (!ch) return;
-  videoIndex = (videoIndex - 1 + ch.videos.length) % ch.videos.length;
-  playVideo();
-}
-
-function shuffleAll() {
-  // Pick random channel that has videos
-  const withVideos = CHANNELS.filter(c => c.videos.length > 0);
-  if (withVideos.length === 0) { alert('Add some video IDs first! See comments in the code.'); return; }
-  const rndCh = withVideos[Math.floor(Math.random() * withVideos.length)];
-  loadChannel(rndCh.id);
-}
-
-function updateNowPlaying(ch, idx) {
-  const label = `${ch.emoji} ${ch.name}`;
-  document.getElementById('hdr-now').textContent     = label;
-  document.getElementById('badge-ch').textContent    = ch.name.toUpperCase();
-  document.getElementById('badge-title').textContent = `Video ${idx + 1} of ${ch.videos.length}`;
-  document.getElementById('np-ch').textContent       = ch.name.toUpperCase();
-  document.getElementById('np-title').textContent    = label;
-  document.getElementById('np-artist').textContent   = ch.desc;
-}
-
-function showNeedVideos(ch) {
-  // Highlight the channel anyway for UX
-  document.querySelectorAll('.ch-item').forEach(el =>
-    el.classList.toggle('active', el.dataset.id === ch.id));
-  document.getElementById('badge-ch').textContent = ch.name.toUpperCase();
-  document.getElementById('badge-title').textContent = '⚠️ No videos yet — add IDs to the code!';
-  document.getElementById('np-ch').textContent = ch.name.toUpperCase();
-  document.getElementById('np-title').textContent = 'Coming Soon';
-  document.getElementById('np-artist').textContent = 'Add YouTube video IDs to this channel';
-  document.getElementById('hdr-now').textContent = `${ch.emoji} ${ch.name} — Add videos!`;
-}
-
-/* ─── RENDER CHANNELS ─────────────────────── */
-function renderChannels() {
-  const list = document.getElementById('ch-list');
-  const cats = {};
-  CHANNELS.forEach(ch => {
-    if (!cats[ch.cat]) cats[ch.cat] = [];
-    cats[ch.cat].push(ch);
-  });
-
-  let html = '';
-  for (const [cat, chs] of Object.entries(cats)) {
-    html += `<div class="cat-label">${cat}</div>`;
-    chs.forEach(ch => {
-      const count = ch.videos.length;
-      const countLabel = count > 0 ? `${count} videos` : 'Coming soon';
-      html += `
-        <div class="ch-item" data-id="${ch.id}" onclick="loadChannel('${ch.id}')">
-          <div class="ch-emoji">${ch.emoji}</div>
-          <div class="ch-info">
-            <div class="ch-name">${ch.name}</div>
-            <div class="ch-meta">${countLabel}</div>
-          </div>
-          <div class="ch-live" style="background:${count > 0 ? 'var(--green)' : 'var(--text-dim)'}; box-shadow:${count > 0 ? '0 0 6px var(--green)' : 'none'}"></div>
-        </div>`;
-    });
-  }
-  list.innerHTML = html;
-}
-
-/* ─── STATS ───────────────────────────────── */
-function updateStats() {
-  const total = CHANNELS.reduce((s, c) => s + c.videos.length, 0);
-  document.getElementById('stat-videos').textContent   = total > 0 ? total.toLocaleString() : '0';
-  document.getElementById('stat-channels').textContent = CHANNELS.length;
-}
-
-function fakeViewers() {
-  const el = document.getElementById('stat-watching');
-  const update = () => {
-    const v = Math.floor(Math.random() * 120 + 30);
-    el.textContent = v;
-  };
-  update();
-  setInterval(update, 15000);
-}
-
-/* ─── MEANDER CANVAS ANIMATION ────────────── */
-(function () {
-  const canvas = document.getElementById('meander-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let W, H, t = 0;
-
-  function resize() {
-    W = canvas.width  = canvas.offsetWidth;
-    H = canvas.height = canvas.offsetHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    const spacing = 60;
-    const cols = Math.ceil(W / spacing) + 2;
-    const rows = Math.ceil(H / spacing) + 2;
-
-    ctx.strokeStyle = '#1152CC';
-    ctx.lineWidth = 1.5;
-
-    for (let r = -1; r < rows; r++) {
-      for (let c = -1; c < cols; c++) {
-        const x = c * spacing + ((t * 0.3) % spacing);
-        const y = r * spacing + ((t * 0.15) % spacing);
-        drawMeanderCell(ctx, x, y, spacing * 0.7);
-      }
-    }
-    t += 0.4;
-    requestAnimationFrame(draw);
-  }
-
-  function drawMeanderCell(ctx, x, y, s) {
-    const u = s / 4;
-    ctx.beginPath();
-    // Simple Greek key unit shape
-    ctx.moveTo(x,        y + u);
-    ctx.lineTo(x,        y);
-    ctx.lineTo(x + 2*u,  y);
-    ctx.lineTo(x + 2*u,  y + 2*u);
-    ctx.lineTo(x + u,    y + 2*u);
-    ctx.lineTo(x + u,    y + u);
-    ctx.stroke();
-  }
-
-  draw();
-})();
-
-/* ─── VISITOR COUNTER ANIMATION ───────────── */
-(function () {
-  const el = document.getElementById('visitor-count');
-  if (!el) return;
-  let count = 82417;
-  setInterval(() => {
-    count += Math.floor(Math.random() * 3);
-    el.textContent = count.toLocaleString('el-GR').replace(/\./g, ',').padStart(7, '0').slice(0, 7);
-  }, 8000);
-})();
+let player=null,playerReady=false,activeChannel=null,videoIndex=0;
+function enterSite(){const s=document.getElementById('splash');s.classList.add('splash-exit');setTimeout(()=>{s.style.display='none';document.getElementById('main').style.display='block';initYT();renderChannels();updateStats();fakeViewers();},580);}
+function initYT(){const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s);}
+window.onYouTubeIframeAPIReady=function(){player=new YT.Player('yt-player',{height:'100%',width:'100%',playerVars:{autoplay:1,controls:1,rel:0,modestbranding:1,iv_load_policy:3},events:{onReady:()=>{playerReady=true;},onStateChange:e=>{if(e.data===YT.PlayerState.ENDED)nextVideo();}}});};
+function loadChannel(id){const ch=CHANNELS.find(c=>c.id===id);if(!ch||!ch.videos.length)return;activeChannel=id;videoIndex=Math.floor(Math.random()*ch.videos.length);document.querySelectorAll('.ch-item').forEach(el=>el.classList.toggle('active',el.dataset.id===id));playVideo();}
+function playVideo(){const ch=CHANNELS.find(c=>c.id===activeChannel);if(!ch||!playerReady)return;document.getElementById('tv-placeholder').style.display='none';player.loadVideoById(ch.videos[videoIndex]);updateNowPlaying(ch);}
+function nextVideo(){const ch=CHANNELS.find(c=>c.id===activeChannel);if(!ch)return;videoIndex=(videoIndex+1)%ch.videos.length;playVideo();}
+function prevVideo(){const ch=CHANNELS.find(c=>c.id===activeChannel);if(!ch)return;videoIndex=(videoIndex-1+ch.videos.length)%ch.videos.length;playVideo();}
+function shuffleAll(){const w=CHANNELS.filter(c=>c.videos.length>0);if(!w.length)return;const rnd=w[Math.floor(Math.random()*w.length)];activeChannel=rnd.id;videoIndex=Math.floor(Math.random()*rnd.videos.length);document.querySelectorAll('.ch-item').forEach(el=>el.classList.toggle('active',el.dataset.id===rnd.id));playVideo();}
+function updateNowPlaying(ch){const l=ch.emoji+' '+ch.name;document.getElementById('hdr-now').textContent=l;document.getElementById('badge-ch').textContent=ch.name.toUpperCase();document.getElementById('badge-title').textContent='Video '+(videoIndex+1)+' of '+ch.videos.length;document.getElementById('np-ch').textContent=ch.name.toUpperCase();document.getElementById('np-title').textContent=l;document.getElementById('np-artist').textContent=ch.desc;}
+function renderChannels(){const list=document.getElementById('ch-list');const cats={};CHANNELS.forEach(ch=>{if(!cats[ch.cat])cats[ch.cat]=[];cats[ch.cat].push(ch);});let html='';for(const[cat,chs]of Object.entries(cats)){html+='<div class="cat-label">'+cat+'</div>';chs.forEach(ch=>{const n=ch.videos.length;html+='<div class="ch-item" data-id="'+ch.id+'" onclick="loadChannel(''+ch.id+'')"><div class="ch-emoji">'+ch.emoji+'</div><div class="ch-info"><div class="ch-name">'+ch.name+'</div><div class="ch-meta">'+n+' videos</div></div><div class="ch-live" style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)"></div></div>';});}list.innerHTML=html;}
+function updateStats(){const t=CHANNELS.reduce((s,c)=>s+c.videos.length,0);document.getElementById('stat-videos').textContent=t.toLocaleString();document.getElementById('stat-channels').textContent=CHANNELS.length;}
+function fakeViewers(){const el=document.getElementById('stat-watching');const u=()=>{el.textContent=Math.floor(Math.random()*120+30);};u();setInterval(u,15000);}
+(function(){const canvas=document.getElementById('meander-canvas');if(!canvas)return;const ctx=canvas.getContext('2d');let W,H,t=0;function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}resize();window.addEventListener('resize',resize);function draw(){ctx.clearRect(0,0,W,H);const sp=60,cols=Math.ceil(W/sp)+2,rows=Math.ceil(H/sp)+2;ctx.strokeStyle='#1152CC';ctx.lineWidth=1.5;for(let r=-1;r<rows;r++){for(let c=-1;c<cols;c++){const x=c*sp+((t*0.3)%sp),y=r*sp+((t*0.15)%sp),u=(sp*0.7)/4;ctx.beginPath();ctx.moveTo(x,y+u);ctx.lineTo(x,y);ctx.lineTo(x+2*u,y);ctx.lineTo(x+2*u,y+2*u);ctx.lineTo(x+u,y+2*u);ctx.lineTo(x+u,y+u);ctx.stroke();}}t+=0.4;requestAnimationFrame(draw);}draw();})();
+(function(){const el=document.getElementById('visitor-count');if(!el)return;let c=82417;setInterval(()=>{c+=Math.floor(Math.random()*3);el.textContent=String(c).padStart(7,'0');},8000);})();
 </script>
 </body>
 </html>
