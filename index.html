@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greek Rewind — Η Μουσική μας, Πάντα Ζωντανή</title>
+  <meta name="description" content="50+ years of Greek music. No ads. No algorithm. Just pure discovery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=VT323&family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── DESIGN TOKENS ─────────────────────────────────────── */
+    :root {
+      --bg:          #06060E;
+      --surface:     #0C0C1E;
+      --surface2:    #121228;
+      --blue:        #1152CC;
+      --blue-bright: #3B82F6;
+      --blue-glow:   rgba(59,130,246,0.35);
+      --white:       #F0F4FF;
+      --gold:        #F59E0B;
+      --gold-light:  #FCD34D;
+      --pink:        #EF4444;
+      --cyan:        #06B6D4;
+      --green:       #22C55E;
+      --text:        #CBD5E1;
+      --text-dim:    #475569;
+      --border:      rgba(255,255,255,0.07);
+      --border-blue: rgba(59,130,246,0.25);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; overflow:hidden; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+    }
+
+    /* ─── SPLASH ─────────────────────────────────────────────── */
+    #splash {
+      position: fixed; inset: 0; z-index: 999;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Animated Greek meander/wave pattern background */
+    .splash-bg {
+      position: absolute; inset: 0;
+      background-color: #06060E;
+      overflow: hidden;
+    }
+    .splash-bg canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      opacity: 0.18;
+    }
+
+    /* Radial vignette */
+    .splash-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 50% 50%,
+        transparent 20%, rgba(6,6,14,0.75) 70%, #06060E 100%);
+    }
+
+    .splash-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      animation: splashIn 1s ease both;
+    }
+    @keyframes splashIn {
+      from { opacity:0; transform: translateY(20px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .splash-eyebrow {
+      font-family: 'VT323', monospace;
+      font-size: clamp(18px, 3vw, 28px);
+      letter-spacing: 0.4em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      animation: fadeInDelay 0.8s ease 0.2s both;
+    }
+
+    .splash-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 16vw, 160px);
+      line-height: 0.88;
+      margin: 0 0 12px;
+      animation: fadeInDelay 0.8s ease 0.4s both;
+    }
+    .splash-logo .line-greek {
+      display: block;
+      background: linear-gradient(160deg, #60A5FA 0%, #BFDBFE 45%, #ffffff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(96,165,250,0.7));
+    }
+    .splash-logo .line-rewind {
+      display: block;
+      background: linear-gradient(160deg, #F59E0B 0%, #FCD34D 50%, #FEF3C7 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(245,158,11,0.7));
+    }
+
+    /* Greek key / meander decoration */
+    .meander-bar {
+      display: flex; justify-content: center; align-items: center;
+      gap: 0; margin: 16px auto 20px;
+      animation: fadeInDelay 0.8s ease 0.6s both;
+    }
+    .meander-bar svg { width: 320px; height: 20px; opacity: 0.5; }
+
+    .splash-tagline {
+      font-family: 'VT323', monospace;
+      font-size: clamp(14px, 2.5vw, 22px);
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 44px;
+      animation: fadeInDelay 0.8s ease 0.8s both;
+    }
+
+    .enter-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px; letter-spacing: 0.25em;
+      padding: 14px 52px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-bright) 100%);
+      color: #fff; border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.15),
+                  0 0 50px var(--blue-glow);
+      animation: fadeInDelay 0.8s ease 1s both, pulse 2.5s ease-in-out 2s infinite;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .enter-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 0 70px rgba(59,130,246,0.7);
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 2px rgba(255,255,255,0.15), 0 0 50px var(--blue-glow); }
+      50%      { box-shadow: 0 0 0 2px rgba(255,255,255,0.3), 0 0 80px rgba(59,130,246,0.6); }
+    }
+
+    .splash-footer {
+      position: absolute; bottom: 28px; left: 0; right: 0;
+      text-align: center;
+      font-family: 'VT323', monospace; font-size: 16px;
+      color: var(--text-dim); letter-spacing: 0.12em;
+      animation: fadeInDelay 0.8s ease 1.4s both;
+    }
+
+    @keyframes fadeInDelay {
+      from { opacity:0; transform: translateY(10px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .splash-exit {
+      animation: splashExit 0.55s cubic-bezier(0.4,0,1,1) forwards !important;
+    }
+    @keyframes splashExit {
+      to { opacity:0; transform: scale(1.04); pointer-events:none; }
+    }
+
+
+    /* ─── MAIN LAYOUT ────────────────────────────────────────── */
+    #main { display:none; height:100vh; width:100vw; overflow:hidden; }
+
+    /* Scanline overlay */
+    #main::after {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:200;
+      background: repeating-linear-gradient(0deg,
+        transparent, transparent 2px,
+        rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 308px;
+      grid-template-rows: 58px 1fr;
+      height: 100vh;
+    }
+
+
+    /* ─── HEADER ─────────────────────────────────────────────── */
+    .header {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; gap: 18px;
+      padding: 0 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 10;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px; letter-spacing: 0.08em;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .logo .lg { color: #60A5FA; }
+    .logo .lr { color: var(--gold); }
+
+    .ticker-wrap {
+      flex:1; overflow:hidden; position:relative;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+    .ticker {
+      display: flex; align-items: center; gap: 10px;
+      white-space: nowrap;
+    }
+    .live-dot {
+      width:8px; height:8px; border-radius:50%;
+      background: var(--pink); flex-shrink:0;
+      animation: blink 1s infinite;
+      box-shadow: 0 0 8px var(--pink);
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .ticker-text {
+      font-family: 'VT323', monospace; font-size:17px;
+      color: var(--text-dim);
+    }
+    .ticker-text b { color: var(--white); }
+
+    .hdr-btns { display:flex; gap:8px; }
+    .hdr-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text); padding: 5px 14px;
+      border-radius: 20px; cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px; font-weight:700;
+      letter-spacing: 0.08em;
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+    }
+    .hdr-btn:hover {
+      background: rgba(59,130,246,0.2);
+      border-color: var(--border-blue);
+      color: #fff;
+    }
+    .hdr-btn.shuf {
+      background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(245,158,11,0.15));
+      border-color: rgba(245,158,11,0.3);
+      color: var(--gold-light);
+    }
+    .hdr-btn.shuf:hover {
+      background: linear-gradient(135deg, rgba(59,130,246,0.35), rgba(245,158,11,0.25));
+    }
+
+
+    /* ─── PLAYER AREA ────────────────────────────────────────── */
+    .player-area {
+      display: flex; align-items: center; justify-content: center;
+      padding: 28px 32px;
+      background: var(--bg);
+      position: relative; overflow:hidden;
+    }
+
+    /* Subtle ambient glow behind TV */
+    .player-area::before {
+      content:''; position:absolute;
+      width:60%; height:60%;
+      background: radial-gradient(ellipse, rgba(17,82,204,0.12) 0%, transparent 70%);
+      pointer-events:none;
+    }
+
+    /* CRT TV Frame */
+    .tv-wrap {
+      position: relative;
+      width: 100%; max-width: 820px;
+    }
+
+    .tv-frame {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #0A0A1C;
+      border-radius: 18px;
+      padding: 10px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 0 0 10px #111130,
+        0 0 0 11px rgba(255,255,255,0.03),
+        0 0 0 22px #080820,
+        0 40px 100px rgba(0,0,0,0.85),
+        0 0 80px rgba(59,130,246,0.08);
+      position: relative;
+    }
+
+    /* CRT corner "knobs" */
+    .tv-frame::before, .tv-frame::after {
+      content:''; position:absolute;
+      width:18px; height:18px;
+      background: #1A1A38;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.05);
+      bottom: -30px;
+    }
+    .tv-frame::before { left:15%; }
+    .tv-frame::after  { right:15%; }
+
+    .tv-screen {
+      width:100%; height:100%;
+      background:#000; border-radius:10px;
+      overflow:hidden; position:relative;
+    }
+    .tv-screen iframe { width:100%; height:100%; border:none; display:block; }
+
+    /* Loading state */
+    .tv-placeholder {
+      position:absolute; inset:0;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:16px;
+      background: linear-gradient(135deg, #080814, #0D0D28);
+    }
+    .tv-placeholder .ph-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size:48px;
+      background: linear-gradient(135deg, #60A5FA, #F59E0B);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .tv-placeholder .ph-msg {
+      font-family: 'VT323', monospace; font-size:20px;
+      color: var(--text-dim); letter-spacing:0.2em;
+      animation: blink 1.5s infinite;
+    }
+    .tv-placeholder .ph-arrow {
+      font-family: 'VT323', monospace; font-size:16px;
+      color: var(--blue-bright); letter-spacing:0.1em;
+      margin-top:8px;
+    }
+
+    /* Channel badge above player */
+    .now-badge {
+      position: absolute;
+      top: -38px; left: 0;
+      display: flex; align-items:center; gap:8px;
+    }
+    .now-badge .badge-channel {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size:13px; font-weight:700; letter-spacing:0.1em;
+      color: var(--blue-bright);
+      background: rgba(59,130,246,0.12);
+      border: 1px solid var(--border-blue);
+      padding: 3px 10px; border-radius:4px;
+    }
+    .now-badge .badge-title {
+      font-family: 'VT323', monospace; font-size:16px;
+      color: var(--text-dim); max-width:400px;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+
+
+    /* ─── SIDEBAR ────────────────────────────────────────────── */
+    .sidebar {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction:column;
+      overflow:hidden;
+    }
+
+    .sb-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink:0;
+    }
+
+    .sb-label {
+      font-family: 'VT323', monospace;
+      font-size: 13px; letter-spacing:0.22em;
+      color: var(--text-dim); margin-bottom:10px;
+      text-transform:uppercase;
+    }
+
+    /* Donate */
+    .donate-btn {
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      width:100%; padding:11px 16px;
+      background: linear-gradient(135deg, #D97706, #F59E0B, #FCD34D);
+      border:none; border-radius:8px; cursor:pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size:15px; font-weight:900; letter-spacing:0.12em;
+      color:#1C0900; text-decoration:none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(245,158,11,0.2);
+    }
+    .donate-btn:hover {
+      transform:scale(1.02);
+      box-shadow: 0 4px 30px rgba(245,158,11,0.45);
+    }
+    .donate-sub {
+      font-size:11px; color:var(--text-dim);
+      text-align:center; margin-top:7px;
+      line-height:1.4;
+    }
+
+    /* Stats row */
+    .stats-row { display:flex; gap:0; }
+    .stat-cell {
+      flex:1; text-align:center;
+      padding:6px 4px;
+      border-right:1px solid var(--border);
+    }
+    .stat-cell:last-child { border-right:none; }
+    .stat-val {
+      font-family:'VT323', monospace; font-size:26px;
+      color:var(--gold); display:block; line-height:1;
+    }
+    .stat-lbl {
+      font-size:10px; letter-spacing:0.1em;
+      color:var(--text-dim); text-transform:uppercase;
+      display:block; margin-top:2px;
+    }
+
+    /* Now playing card */
+    .np-card {
+      background: rgba(59,130,246,0.06);
+      border:1px solid var(--border-blue);
+      border-radius:8px; padding:12px;
+    }
+    .np-ch {
+      font-family:'VT323', monospace; font-size:12px;
+      letter-spacing:0.2em; color:var(--blue-bright);
+      margin-bottom:4px;
+    }
+    .np-title {
+      font-family:'Barlow Condensed', sans-serif;
+      font-weight:700; font-size:15px; color:var(--white);
+      line-height:1.3; margin-bottom:2px;
+    }
+    .np-artist {
+      font-size:12px; color:var(--text-dim);
+    }
+
+    /* Channel list */
+    .ch-list {
+      flex:1; overflow-y:auto;
+      padding: 8px 8px 16px;
+    }
+    .ch-list::-webkit-scrollbar { width:3px; }
+    .ch-list::-webkit-scrollbar-track { background:transparent; }
+    .ch-list::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:2px; }
+
+    .cat-label {
+      font-size:10px; font-weight:700; letter-spacing:0.2em;
+      color:var(--text-dim); text-transform:uppercase;
+      padding:10px 8px 5px;
+    }
+
+    .ch-item {
+      display:flex; align-items:center; gap:10px;
+      padding:9px 10px; border-radius:8px; cursor:pointer;
+      transition: background 0.15s;
+      margin-bottom:2px;
+      border-left:3px solid transparent;
+    }
+    .ch-item:hover { background: rgba(255,255,255,0.05); }
+    .ch-item.active {
+      background: rgba(59,130,246,0.12);
+      border-left-color: var(--blue-bright);
+    }
+    .ch-emoji { font-size:20px; width:26px; text-align:center; flex-shrink:0; }
+    .ch-info { flex:1; overflow:hidden; }
+    .ch-name {
+      font-family:'Barlow Condensed', sans-serif;
+      font-weight:700; font-size:14px; color:var(--white);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .ch-meta {
+      font-family:'VT323', monospace; font-size:13px; color:var(--text-dim);
+    }
+    .ch-live {
+      width:6px; height:6px; border-radius:50%;
+      background:var(--green); flex-shrink:0;
+      box-shadow:0 0 6px var(--green);
+    }
+
+    /* Footer */
+    .sidebar-footer {
+      padding:10px 16px;
+      border-top:1px solid var(--border);
+      flex-shrink:0;
+    }
+    .sf-text {
+      font-size:11px; color:var(--text-dim);
+      text-align:center; line-height:1.6;
+    }
+    .sf-text a { color:var(--blue-bright); text-decoration:none; }
+    .sf-text a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     SPLASH SCREEN
+════════════════════════════════════════════ -->
+<div id="splash">
+  <div class="splash-bg"><canvas id="meander-canvas"></canvas></div>
+  <div class="splash-vignette"></div>
+
+  <div class="splash-content">
+    <div class="splash-eyebrow">Θες τη Μουσική σου;</div>
+
+    <div class="splash-logo">
+      <span class="line-greek">GREEK</span>
+      <span class="line-rewind">REWIND</span>
+    </div>
+
+    <!-- Greek meander / key decoration -->
+    <div class="meander-bar">
+      <svg viewBox="0 0 320 20" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,10 L6,10 L6,2 L14,2 L14,18 L22,18 L22,10 L30,10
+                 L30,2 L38,2 L38,18 L46,18 L46,10 L54,10
+                 L54,2 L62,2 L62,18 L70,18 L70,10 L78,10
+                 L78,2 L86,2 L86,18 L94,18 L94,10 L102,10
+                 L102,2 L110,2 L110,18 L118,18 L118,10 L126,10
+                 L126,2 L134,2 L134,18 L142,18 L142,10 L150,10
+                 L150,2 L158,2 L158,18 L166,18 L166,10 L174,10
+                 L174,2 L182,2 L182,18 L190,18 L190,10 L198,10
+                 L198,2 L206,2 L206,18 L214,18 L214,10 L222,10
+                 L222,2 L230,2 L230,18 L238,18 L238,10 L246,10
+                 L246,2 L254,2 L254,18 L262,18 L262,10 L270,10
+                 L270,2 L278,2 L278,18 L286,18 L286,10 L294,10
+                 L294,2 L302,2 L302,18 L310,18 L310,10 L320,10"
+              stroke="#3B82F6" stroke-width="1.5" fill="none" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="splash-tagline">50 ΧΡΌΝΙΑ ΕΛΛΗΝΙΚΗ ΜΟΥΣΙΚΉ · ΧΩΡΊΣ ΔΙΑΦΗΜΊΣΕΙΣ · ΧΩΡΊΣ ΑΛΓΌΡΙΘΜΟ</div>
+
+    <button class="enter-btn" onclick="enterSite()">▶ &nbsp;ENTER</button>
+  </div>
+
+  <div class="splash-footer">
+    VISITORS: <span id="visitor-count">082,417</span>
+    &nbsp;·&nbsp; Free forever &nbsp;·&nbsp; Built with ❤️ for Greece
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     MAIN PLAYER
+════════════════════════════════════════════ -->
+<div id="main">
+  <div class="layout">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">
+        <span class="lg">GREEK</span>&nbsp;<span class="lr">REWIND</span>
+      </div>
+
+      <div class="ticker-wrap">
+        <div class="ticker">
+          <div class="live-dot"></div>
+          <div class="ticker-text">NOW PLAYING: <b id="hdr-now">Select a channel →</b></div>
+        </div>
+      </div>
+
+      <div class="hdr-btns">
+        <button class="hdr-btn" onclick="prevVideo()">⏮ PREV</button>
+        <button class="hdr-btn" onclick="nextVideo()">NEXT ⏭</button>
+        <button class="hdr-btn shuf" onclick="shuffleAll()">🎲 SHUFFLE</button>
+      </div>
+    </header>
+
+    <!-- PLAYER AREA -->
+    <div class="player-area">
+      <div class="tv-wrap">
+        <div class="now-badge">
+          <div class="badge-channel" id="badge-ch">— GREEK REWIND —</div>
+          <div class="badge-title" id="badge-title">Choose a channel from the right →</div>
+        </div>
+        <div class="tv-frame">
+          <div class="tv-screen">
+            <div class="tv-placeholder" id="tv-placeholder">
+              <div class="ph-logo">GREEK REWIND</div>
+              <div class="ph-msg">SELECT A CHANNEL TO BEGIN</div>
+              <div class="ph-arrow">→ Choose from the list on the right</div>
+            </div>
+            <div id="yt-player"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Buy Me a Coffee -->
+      <div class="sb-section">
+        <a href="https://www.buymeacoffee.com/YOURNAME" target="_blank" class="donate-btn">
+          ☕ &nbsp;BUY ME A COFFEE
+        </a>
+        <div class="donate-sub">
+          Free forever. No ads.<br>Help keep it alive! 💛
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="sb-section" style="padding:12px 16px;">
+        <div class="stats-row">
+          <div class="stat-cell">
+            <span class="stat-val" id="stat-videos">—</span>
+            <span class="stat-lbl">Videos</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-val" id="stat-channels">9</span>
+            <span class="stat-lbl">Channels</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-val" id="stat-watching">—</span>
+            <span class="stat-lbl">Watching</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Now Playing -->
+      <div class="sb-section">
+        <div class="sb-label">📺 Now Playing</div>
+        <div class="np-card">
+          <div class="np-ch" id="np-ch">— GREEK REWIND —</div>
+          <div class="np-title" id="np-title">Ready to Rock 🇬🇷</div>
+          <div class="np-artist" id="np-artist">Select a channel to begin</div>
+        </div>
+      </div>
+
+      <!-- Channel List -->
+      <div class="ch-list" id="ch-list">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Footer -->
+      <div class="sidebar-footer">
+        <div class="sf-text">
+          Videos via YouTube API · No ads on embeds<br>
+          <a href="https://www.buymeacoffee.com/YOURNAME" target="_blank">Support the project ☕</a>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+
+<script>
+/* ════════════════════════════════════════════════════════
+   CHANNEL DATABASE
+   ─────────────────────────────────────────────────────
+   HOW TO ADD VIDEOS:
+   1. Open any YouTube video
+   2. Copy the ID from the URL after "watch?v="
+      e.g. youtube.com/watch?v=AbCdEfGhIjK  →  ID: "AbCdEfGhIjK"
+   3. Add the ID string to the videos[] array below
+
+   TIP: You can add as many IDs as you want per channel!
+════════════════════════════════════════════════════════ */
+
+const CHANNELS = [
+  {
+    id: 'laika',
+    name: 'Λαϊκά',
+    emoji: '🎵',
+    desc: 'Caifas, Parios, Stratos & παρέα',
+    cat: '🏛️ CLASSIC',
+    videos: [
+      // ── Paste real YouTube video IDs here ──
+      // e.g. 'dQw4w9WgXcW', 'oHg5SJYRHA0', ...
+    ]
+  },
+  {
+    id: 'retro-pop',
+    name: 'Retro Pop 80s/90s',
+    emoji: '📼',
+    desc: 'Η χρυσή εποχή του ελληνικού pop',
+    cat: '🏛️ CLASSIC',
+    videos: []
+  },
+  {
+    id: 'entexno',
+    name: 'Έντεχνο',
+    emoji: '🎼',
+    desc: 'Theodorakis, Hatzidakis, Savvopoulos',
+    cat: '🏛️ CLASSIC',
+    videos: []
+  },
+  {
+    id: 'rebetiko',
+    name: 'Ρεμπέτικο',
+    emoji: '🪗',
+    desc: 'The roots of Greek music',
+    cat: '🏛️ CLASSIC',
+    videos: []
+  },
+  {
+    id: 'greek-rock',
+    name: 'Greek Rock',
+    emoji: '🤘',
+    desc: 'Trypes, Xylina Spathia, Socrates',
+    cat: '🎸 ROCK',
+    videos: []
+  },
+  {
+    id: 'mad-tv',
+    name: 'MAD TV Era',
+    emoji: '📺',
+    desc: 'Τα video clips που μεγαλώσαμε',
+    cat: '📺 TV ERA',
+    videos: []
+  },
+  {
+    id: 'summer',
+    name: 'Καλοκαιρινά ☀️',
+    emoji: '🌊',
+    desc: 'Hits που μυρίζουν θάλασσα',
+    cat: '☀️ MOOD',
+    videos: []
+  },
+  {
+    id: 'hip-hop',
+    name: 'Greek Hip Hop',
+    emoji: '🎤',
+    desc: 'Η ελληνική hip hop σκηνή',
+    cat: '🎤 URBAN',
+    videos: []
+  },
+  {
+    id: 'trap',
+    name: 'Greek Trap',
+    emoji: '👾',
+    desc: 'Νέα γενιά, νέος ήχος',
+    cat: '🎤 URBAN',
+    videos: []
+  }
+];
+
+/* ─── STATE ───────────────────────────────── */
+let player        = null;
+let playerReady   = false;
+let activeChannel = null;
+let videoIndex    = 0;
+
+/* ─── SPLASH → MAIN ──────────────────────── */
+function enterSite() {
+  const splash = document.getElementById('splash');
+  splash.classList.add('splash-exit');
+  setTimeout(() => {
+    splash.style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    initYT();
+    renderChannels();
+    updateStats();
+    fakeViewers();
+  }, 580);
+}
+
+/* ─── YOUTUBE API ─────────────────────────── */
+function initYT() {
+  const s = document.createElement('script');
+  s.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(s);
+}
+
+window.onYouTubeIframeAPIReady = function () {
+  player = new YT.Player('yt-player', {
+    height: '100%', width: '100%',
+    playerVars: {
+      autoplay: 1, controls: 1, rel: 0,
+      modestbranding: 1, iv_load_policy: 3
+    },
+    events: {
+      onReady: () => { playerReady = true; },
+      onStateChange: e => {
+        if (e.data === YT.PlayerState.ENDED) nextVideo();
+      }
+    }
+  });
+};
+
+/* ─── CHANNEL LOGIC ───────────────────────── */
+function loadChannel(id) {
+  const ch = CHANNELS.find(c => c.id === id);
+  if (!ch) return;
+
+  // Check if channel has videos
+  if (ch.videos.length === 0) {
+    showNeedVideos(ch);
+    return;
+  }
+
+  activeChannel = id;
+  videoIndex = Math.floor(Math.random() * ch.videos.length);
+
+  // Update active highlight
+  document.querySelectorAll('.ch-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.id === id));
+
+  playVideo();
+}
+
+function playVideo() {
+  const ch = CHANNELS.find(c => c.id === activeChannel);
+  if (!ch || !playerReady) return;
+
+  const vid = ch.videos[videoIndex];
+  document.getElementById('tv-placeholder').style.display = 'none';
+  player.loadVideoById(vid);
+  updateNowPlaying(ch, videoIndex);
+}
+
+function nextVideo() {
+  const ch = CHANNELS.find(c => c.id === activeChannel);
+  if (!ch) return;
+  videoIndex = (videoIndex + 1) % ch.videos.length;
+  playVideo();
+}
+
+function prevVideo() {
+  const ch = CHANNELS.find(c => c.id === activeChannel);
+  if (!ch) return;
+  videoIndex = (videoIndex - 1 + ch.videos.length) % ch.videos.length;
+  playVideo();
+}
+
+function shuffleAll() {
+  // Pick random channel that has videos
+  const withVideos = CHANNELS.filter(c => c.videos.length > 0);
+  if (withVideos.length === 0) { alert('Add some video IDs first! See comments in the code.'); return; }
+  const rndCh = withVideos[Math.floor(Math.random() * withVideos.length)];
+  loadChannel(rndCh.id);
+}
+
+function updateNowPlaying(ch, idx) {
+  const label = `${ch.emoji} ${ch.name}`;
+  document.getElementById('hdr-now').textContent     = label;
+  document.getElementById('badge-ch').textContent    = ch.name.toUpperCase();
+  document.getElementById('badge-title').textContent = `Video ${idx + 1} of ${ch.videos.length}`;
+  document.getElementById('np-ch').textContent       = ch.name.toUpperCase();
+  document.getElementById('np-title').textContent    = label;
+  document.getElementById('np-artist').textContent   = ch.desc;
+}
+
+function showNeedVideos(ch) {
+  // Highlight the channel anyway for UX
+  document.querySelectorAll('.ch-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.id === ch.id));
+  document.getElementById('badge-ch').textContent = ch.name.toUpperCase();
+  document.getElementById('badge-title').textContent = '⚠️ No videos yet — add IDs to the code!';
+  document.getElementById('np-ch').textContent = ch.name.toUpperCase();
+  document.getElementById('np-title').textContent = 'Coming Soon';
+  document.getElementById('np-artist').textContent = 'Add YouTube video IDs to this channel';
+  document.getElementById('hdr-now').textContent = `${ch.emoji} ${ch.name} — Add videos!`;
+}
+
+/* ─── RENDER CHANNELS ─────────────────────── */
+function renderChannels() {
+  const list = document.getElementById('ch-list');
+  const cats = {};
+  CHANNELS.forEach(ch => {
+    if (!cats[ch.cat]) cats[ch.cat] = [];
+    cats[ch.cat].push(ch);
+  });
+
+  let html = '';
+  for (const [cat, chs] of Object.entries(cats)) {
+    html += `<div class="cat-label">${cat}</div>`;
+    chs.forEach(ch => {
+      const count = ch.videos.length;
+      const countLabel = count > 0 ? `${count} videos` : 'Coming soon';
+      html += `
+        <div class="ch-item" data-id="${ch.id}" onclick="loadChannel('${ch.id}')">
+          <div class="ch-emoji">${ch.emoji}</div>
+          <div class="ch-info">
+            <div class="ch-name">${ch.name}</div>
+            <div class="ch-meta">${countLabel}</div>
+          </div>
+          <div class="ch-live" style="background:${count > 0 ? 'var(--green)' : 'var(--text-dim)'}; box-shadow:${count > 0 ? '0 0 6px var(--green)' : 'none'}"></div>
+        </div>`;
+    });
+  }
+  list.innerHTML = html;
+}
+
+/* ─── STATS ───────────────────────────────── */
+function updateStats() {
+  const total = CHANNELS.reduce((s, c) => s + c.videos.length, 0);
+  document.getElementById('stat-videos').textContent   = total > 0 ? total.toLocaleString() : '0';
+  document.getElementById('stat-channels').textContent = CHANNELS.length;
+}
+
+function fakeViewers() {
+  const el = document.getElementById('stat-watching');
+  const update = () => {
+    const v = Math.floor(Math.random() * 120 + 30);
+    el.textContent = v;
+  };
+  update();
+  setInterval(update, 15000);
+}
+
+/* ─── MEANDER CANVAS ANIMATION ────────────── */
+(function () {
+  const canvas = document.getElementById('meander-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const spacing = 60;
+    const cols = Math.ceil(W / spacing) + 2;
+    const rows = Math.ceil(H / spacing) + 2;
+
+    ctx.strokeStyle = '#1152CC';
+    ctx.lineWidth = 1.5;
+
+    for (let r = -1; r < rows; r++) {
+      for (let c = -1; c < cols; c++) {
+        const x = c * spacing + ((t * 0.3) % spacing);
+        const y = r * spacing + ((t * 0.15) % spacing);
+        drawMeanderCell(ctx, x, y, spacing * 0.7);
+      }
+    }
+    t += 0.4;
+    requestAnimationFrame(draw);
+  }
+
+  function drawMeanderCell(ctx, x, y, s) {
+    const u = s / 4;
+    ctx.beginPath();
+    // Simple Greek key unit shape
+    ctx.moveTo(x,        y + u);
+    ctx.lineTo(x,        y);
+    ctx.lineTo(x + 2*u,  y);
+    ctx.lineTo(x + 2*u,  y + 2*u);
+    ctx.lineTo(x + u,    y + 2*u);
+    ctx.lineTo(x + u,    y + u);
+    ctx.stroke();
+  }
+
+  draw();
+})();
+
+/* ─── VISITOR COUNTER ANIMATION ───────────── */
+(function () {
+  const el = document.getElementById('visitor-count');
+  if (!el) return;
+  let count = 82417;
+  setInterval(() => {
+    count += Math.floor(Math.random() * 3);
+    el.textContent = count.toLocaleString('el-GR').replace(/\./g, ',').padStart(7, '0').slice(0, 7);
+  }, 8000);
+})();
+</script>
+</body>
+</html>
