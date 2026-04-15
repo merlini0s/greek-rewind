@@ -1,0 +1,90 @@
+[
+  {
+    "id": "laika",
+    "name": "Λαϊκά",
+    "emoji": "🎵",
+    "desc": "Νταλάρας, Αλεξίου, Πάριος, Καρράς & παρέα",
+    "cat": "🏛️ CLASSIC",
+    "videos": [
+      "QiCnTuXk3g4","yw03vnUpuH0","N2QabQMCZB0","USGHMnoXkyU","aFPerVYL_uY",
+      "uvCEXxRi-kA","ced9oYFF0pA","myWN6pIhHOI","-5pDGH9ktNo","tn98ApDi0bQ",
+      "m3TKQaLa8UI","8PsMCAl0Vjo","VD06faANs9g","xcfwnHoeZ24","bnb21OB4izI",
+      "bqB3EcICj4w","Qq6L2F8ae4Q","lF3zt_Gj3uk","a6HC2UeaN4E","K7g1BWbhQRc",
+      "fO5ewrd55_Q","HXyLeF-RjVM","5HnnMc-cYxA","BGSGXxKp9Xc","CgiUaEjCvsA",
+      "6so7dIITb2o"
+    ]
+  },
+  {
+    "id": "retro-pop",
+    "name": "Retro Pop 80s/90s",
+    "emoji": "📼",
+    "desc": "Βίσση, Ρουβάς, Βανδή, Παπαρίζου",
+    "cat": "🏛️ CLASSIC",
+    "videos": [
+      "_ioSCtzBm2E","SLcY0ntEvJs","eGeSdjU1HrA","6gP_FHvT1Ns",
+      "I6AIuIaBpUc","ecIphyKtQl0","-caFpjGa5TI","RbuW_SdQ3CM"
+    ]
+  },
+  {
+    "id": "entexno",
+    "name": "Έντεχνο",
+    "emoji": "🎼",
+    "desc": "Θεοδωράκης, Χατζιδάκις, Σαββόπουλος",
+    "cat": "🏛️ CLASSIC",
+    "videos": []
+  },
+  {
+    "id": "rebetiko",
+    "name": "Ρεμπέτικο",
+    "emoji": "🪗",
+    "desc": "Τσιτσάνης, Βαμβακάρης, Καζαντζίδης",
+    "cat": "🏛️ CLASSIC",
+    "videos": []
+  },
+  {
+    "id": "greek-rock",
+    "name": "Greek Rock",
+    "emoji": "🤘",
+    "desc": "Τρύπες, Ξύλινα Σπαθιά, Μάλαμας",
+    "cat": "🎸 ROCK",
+    "videos": []
+  },
+  {
+    "id": "mad-tv",
+    "name": "MAD TV Era",
+    "emoji": "📺",
+    "desc": "Κιάμος, Παντελίδης, Δάντης, Φουρέιρα",
+    "cat": "📺 TV ERA",
+    "videos": []
+  },
+  {
+    "id": "summer",
+    "name": "Καλοκαιρινά ☀️",
+    "emoji": "🌊",
+    "desc": "Hits που μυρίζουν θάλασσα",
+    "cat": "☀️ MOOD",
+    "videos": []
+  },
+  {
+    "id": "hip-hop",
+    "name": "Greek Hip Hop",
+    "emoji": "🎤",
+    "desc": "Mente Fuerte, Stereo Mike & παρέα",
+    "cat": "🎤 URBAN",
+    "videos": [
+      "rBhLpHOGxV4","y6lGSEfhv6E","2ekWBE6Dxug","lnRgX3Iehb4",
+      "KTQnFbOXD7w","mSEVDQ-DKUE","WXFGnPMoprw","MoH7B7rFDLs"
+    ]
+  },
+  {
+    "id": "trap",
+    "name": "Greek Trap",
+    "emoji": "👾",
+    "desc": "Snik, Light, Mad Clip & νέα γενιά",
+    "cat": "🎤 URBAN",
+    "videos": [
+      "MJ5rBGl7Fuo","c4dV0zqd2-c","g4VWAzHmVgA","3TK2n1nDTJA",
+      "FBX-jfRMOYs","0b5N3lJMKkQ","NCcLcxXnfhY","SJwbDsVXdDU"
+    ]
+  }
+]
